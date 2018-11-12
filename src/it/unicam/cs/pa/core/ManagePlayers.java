@@ -6,39 +6,23 @@ import java.util.concurrent.TimeUnit;
 
 public class ManagePlayers {
 
-    Scanner scanner;
     ConsolePrinter cprinter;
 
     public ManagePlayers() {
-        this.scanner = new Scanner(System.in);
+        this.cprinter = new ConsolePrinter();
     }
 
-    public void run() {
-        while(true) {
-            System.out.println("Press any key to add a new player or 'q' to exit");
-            String in = this.scanner.nextLine();
-            if (in.equals("q")) {
-                break;
-            } else {
-                addNewPlayer();
-            }
-        }
-    }
-
-    private void addNewPlayer() {
+    public void addNewPlayer() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Username of new player? ");
-        String username = this.scanner.nextLine();
+        String username = scanner.nextLine();
         System.out.println("Which symbol do you want to use? ");
-        char symbol = 0;
-        try {
-            symbol = (char) System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        char symbol = scanner.next().charAt(0);
         createPlayer(symbol, username);
     }
 
     private void createPlayer(char symbol, String username) {
+        cprinter.clear();
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
         System.out.println("[2] AI (not implemented)");
@@ -47,13 +31,7 @@ public class ManagePlayers {
             int option = Integer.parseInt(buff_reader.readLine());
             switch(option) {
                 case 1:
-                    //TODO Save in a separated file
-                    Player new_player_obj = new HumanPlayer(symbol, username);
-                    FileOutputStream f = new FileOutputStream(new File("Players.save"));
-                    ObjectOutputStream o = new ObjectOutputStream(f);
-                    o.writeObject(new_player_obj);
-                    o.close();
-                    f.close();
+                    createHuman(symbol, username);
                     break;
                 /**
                  * TODO Implement other player classes
@@ -61,13 +39,27 @@ public class ManagePlayers {
                  */
                 default: System.out.println("Invalid option");
                     TimeUnit.SECONDS.sleep(2);
-
             }
         } catch(NumberFormatException ex) {
             System.out.println("Not a number");
         } catch(IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createHuman(char symbol, String username) {
+        try {
+            Player new_player_obj = new HumanPlayer(symbol, username);
+            FileOutputStream f = new FileOutputStream(new File("Players.save"));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+            o.writeObject(new_player_obj);
+            o.close();
+            f.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

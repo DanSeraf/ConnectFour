@@ -36,7 +36,7 @@ public class Menu {
                     case 1: this.match.start();
                     cprinter.clear();
                     continue;
-                    case 2: this.manage.run();
+                    case 2: this.manage.addNewPlayer();
                         cprinter.clear();
                         continue;
                     case 3: this.manage.viewPlayers();
