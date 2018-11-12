@@ -1,13 +1,16 @@
 package it.unicam.cs.pa.core;
 
 public class Disc {
-    private char symbol;
+    private char symbol = ' ';
 
-    public Disc(char symbol) {
-        this.symbol = symbol;
+    public Disc() {
     }
 
     public char getSymbol() {
         return this.symbol;
+    }
+
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
     }
 }

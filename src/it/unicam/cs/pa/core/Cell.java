@@ -6,10 +6,19 @@ public class Cell {
     private boolean filled = false;
 
     public Cell() {
-        this.disc = new Disc('#');
+        this.disc = new Disc();
     }
 
     public Disc getDisc() {
         return disc;
+    }
+
+    public void setDisc(char symbol) {
+        this.disc.setSymbol(symbol);
+        this.filled = true;
+    }
+
+    public boolean isFilled() {
+        return this.filled;
     }
 }
