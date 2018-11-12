@@ -1,15 +1,15 @@
 package it.unicam.cs.pa.core;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class ManagePlayers {
+public class ManagePlayers implements  Serializable{
 
-    ConsolePrinter cprinter;
+    private ArrayList<Player> players = new ArrayList<>();
 
     public ManagePlayers() {
-        this.cprinter = new ConsolePrinter();
     }
 
     public void addNewPlayer() {
@@ -22,7 +22,6 @@ public class ManagePlayers {
     }
 
     private void createPlayer(char symbol, String username) {
-        cprinter.clear();
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
         System.out.println("[2] AI (not implemented)");
@@ -50,31 +49,19 @@ public class ManagePlayers {
     }
 
     private void createHuman(char symbol, String username) {
-        try {
-            Player new_player_obj = new HumanPlayer(symbol, username);
-            FileOutputStream f = new FileOutputStream(new File("Players.save"));
-            ObjectOutputStream o = new ObjectOutputStream(f);
-            o.writeObject(new_player_obj);
-            o.close();
-            f.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Player new_player_obj = new HumanPlayer(symbol, username);
+        this.players.add(new_player_obj);
     }
 
     public void viewPlayers() {
-        try{
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("Players.save"));
-            while(true) {
-                Player p = (Player) in.readObject();
-                System.out.println(p.getUser());
+        try {
+            for (Player player:
+                    this.players) {
+                System.out.println("Player: " + player.getUser() + " " + player.getSymbol());
+                TimeUnit.SECONDS.sleep(3);
             }
-        } catch(IOException e) {
-            e.printStackTrace();
-        } catch(ClassNotFoundException ex) {
-            System.out.println("Class not found");
+        } catch(InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 
