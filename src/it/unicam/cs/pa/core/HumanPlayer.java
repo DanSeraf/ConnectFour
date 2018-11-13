@@ -6,7 +6,7 @@ public class HumanPlayer implements Player, Serializable {
 
     private static int ID = 100;
     private final char symbol;
-    private String username = null;
+    private String username;
 
     public HumanPlayer(char symbol, String username) {
         this.symbol = symbol;

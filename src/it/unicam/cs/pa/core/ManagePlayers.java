@@ -4,7 +4,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ManagePlayers implements  Serializable {
+/**
+ *
+ * ManagePlayers
+ * let user add new player
+ * this class is serializable because a Settings.sav will be created to serialize this object
+ *
+ */
+
+public class ManagePlayers implements Serializable {
 
     private ArrayList<Player> players = new ArrayList<>();
 
@@ -19,6 +27,12 @@ public class ManagePlayers implements  Serializable {
         char symbol = scanner.next().charAt(0);
         createPlayer(symbol, username);
     }
+
+    /**
+     * select which kind of player they want to create
+     * @param symbol symbol that identify the player
+     * @param username username of the player
+     */
 
     private void createPlayer(char symbol, String username) {
         System.out.println("Select type of new player");
@@ -50,6 +64,10 @@ public class ManagePlayers implements  Serializable {
         Player new_player_obj = new HumanPlayer(symbol, username);
         this.players.add(new_player_obj);
     }
+
+    /**
+     * view players saved in Settings.sav
+     */
 
     public void viewPlayers() {
         try {

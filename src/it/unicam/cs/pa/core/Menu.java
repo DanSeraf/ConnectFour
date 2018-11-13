@@ -2,7 +2,6 @@ package it.unicam.cs.pa.core;
 
 import java.io.*;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
@@ -69,11 +68,6 @@ public class Menu {
             FileInputStream in_file = new FileInputStream("Settings.sav");
             ObjectInputStream in = new ObjectInputStream(in_file);
             this.manage = (ManagePlayers) in.readObject();
-            try{
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException ex ) {
-                ex.printStackTrace();
-            }
             in.close();
             in_file.close();
         } catch (ClassNotFoundException ex) {

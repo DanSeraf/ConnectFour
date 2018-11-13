@@ -40,12 +40,17 @@ public class BattleGround {
         System.out.println();
     }
 
+    //TODO change this function to boolean to check array index out of bound
     public void addDisc(char symbol, int move) {
-        for (int x = this.x_size-1; x>-1; x--) {
-            if (this.board[x][move].isFilled() == false) {
-                this.board[x][move].setDisc(symbol);
-                break;
+        try {
+            for (int x = this.x_size - 1; x > -1; x--) {
+                if (this.board[x][move].isFilled() == false) {
+                    this.board[x][move].setDisc(symbol);
+                    break;
+                }
             }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            //TODO manage exception for out of bound
         }
     }
 
