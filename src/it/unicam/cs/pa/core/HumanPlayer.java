@@ -2,7 +2,7 @@ package it.unicam.cs.pa.core;
 
 import java.io.Serializable;
 
-public class HumanPlayer implements Player {
+public class HumanPlayer implements Player, Serializable {
 
     private static int ID = 100;
     private final char symbol;

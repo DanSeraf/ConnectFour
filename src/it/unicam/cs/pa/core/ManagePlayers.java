@@ -3,9 +3,8 @@ package it.unicam.cs.pa.core;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-public class ManagePlayers implements  Serializable{
+public class ManagePlayers implements  Serializable {
 
     private ArrayList<Player> players = new ArrayList<>();
 
@@ -37,13 +36,12 @@ public class ManagePlayers implements  Serializable{
                  * case 2: Player p = new AI();
                  */
                 default: System.out.println("Invalid option");
-                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("Press enter to continue");
+                    System.in.read();
             }
         } catch(NumberFormatException ex) {
             System.out.println("Not a number");
         } catch(IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -58,14 +56,15 @@ public class ManagePlayers implements  Serializable{
             for (Player player:
                     this.players) {
                 System.out.println("Player: " + player.getUser() + " " + player.getSymbol());
-                TimeUnit.SECONDS.sleep(3);
             }
-        } catch(InterruptedException ex) {
-            ex.printStackTrace();
+            System.out.println("Press Enter to continue");
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void savePlayer() {
-
+    public ArrayList<Player> getPlayers() {
+        return this.players;
     }
 }

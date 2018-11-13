@@ -13,14 +13,13 @@ public class Menu {
 
     public Menu() {
         scanner = new Scanner(System.in);
-        match = new Match();
         cprinter = new ConsolePrinter();
-        checkForManager();
         showMenu();
     }
 
     public void showMenu() {
         do {
+            checkForManager();
             cprinter.clear();
             System.out.println("[1] Play");
             System.out.println("[2] Add Player");
@@ -31,35 +30,33 @@ public class Menu {
                 BufferedReader buff_reader = new BufferedReader(new InputStreamReader(System.in));
                 int option = Integer.parseInt(buff_reader.readLine());
                 switch(option) {
-                    case 1: this.match.start();
-                    cprinter.clear();
-                    continue;
+                    case 1: cprinter.clear();
+                        this.match = new Match(this.manage);
+                        this.match.start();
+                        continue;
                     case 2: cprinter.clear();
                         this.manage.addNewPlayer();
-                        cprinter.clear();
+                        serialize_manager();
                         continue;
-                    case 3: this.manage.viewPlayers();
-                        cprinter.clear();
+                    case 3: cprinter.clear();
+                        this.manage.viewPlayers();
                         continue;
                     case 4: System.exit(0);
                     default: System.out.println("Invalid option");
-                        TimeUnit.SECONDS.sleep(2);
-                        cprinter.clear();
+                        System.out.println("Press enter to continue");
+                        System.in.read();
+                        continue;
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Not number");
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                serialize_manager();
             }
         } while (true);
     }
 
     private void checkForManager() {
-        File f = new File("settings.sav");
+        File f = new File("Settings.sav");
         if(f.exists() && !f.isDirectory()) {
             deserialize_manager();
         } else {
@@ -72,6 +69,13 @@ public class Menu {
             FileInputStream in_file = new FileInputStream("Settings.sav");
             ObjectInputStream in = new ObjectInputStream(in_file);
             this.manage = (ManagePlayers) in.readObject();
+            try{
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex ) {
+                ex.printStackTrace();
+            }
+            in.close();
+            in_file.close();
         } catch (ClassNotFoundException ex) {
             System.err.println("Class not found");
         } catch (IOException e) {
