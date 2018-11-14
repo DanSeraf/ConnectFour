@@ -55,7 +55,7 @@ public class Menu {
     }
 
     private void checkForManager() {
-        File f = new File("Settings.sav");
+        File f = new File("Manage.sav");
         if(f.exists() && !f.isDirectory()) {
             deserialize_manager();
         } else {
@@ -64,28 +64,39 @@ public class Menu {
     }
 
     private void deserialize_manager() {
+        FileInputStream input_file = null;
+        ObjectInputStream obj_file = null;
         try {
-            FileInputStream in_file = new FileInputStream("Settings.sav");
-            ObjectInputStream in = new ObjectInputStream(in_file);
-            this.manage = (ManagePlayers) in.readObject();
-            in.close();
-            in_file.close();
+            input_file = new FileInputStream("Manage.sav");
+            obj_file = new ObjectInputStream(input_file);
+            this.manage = (ManagePlayers) obj_file.readObject();
         } catch (ClassNotFoundException ex) {
             System.err.println("Class not found");
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (obj_file != null) {
+                try {
+                    obj_file.close();
+                    input_file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     private void serialize_manager() {
         try {
-            FileOutputStream out_file = new FileOutputStream("Settings.sav");
+            FileOutputStream out_file = new FileOutputStream("Manage.sav");
             ObjectOutputStream out = new ObjectOutputStream(out_file);
             out.writeObject(this.manage);
             out.close();
             out_file.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+
         }
     }
 }

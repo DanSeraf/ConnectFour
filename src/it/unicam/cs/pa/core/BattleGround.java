@@ -1,5 +1,7 @@
 package it.unicam.cs.pa.core;
 
+import java.io.IOException;
+
 public class BattleGround {
     public static final int X_SIZE = 7;
     public static final int Y_SIZE = 6;
@@ -11,14 +13,14 @@ public class BattleGround {
         this.x_size = x;
         this.y_size = y;
         this.board = new Cell[x][y];
-        populate();
+        fill();
     }
 
     public BattleGround() {
         this( X_SIZE, Y_SIZE );
     }
 
-    public void populate() {
+    public void fill() {
         for ( int x = 0; x < this.x_size; x++ ) {
             for (int y = 0; y < this.y_size; y++) {
                 this.board[x][y] = new Cell();
@@ -26,32 +28,34 @@ public class BattleGround {
         }
     }
 
-    public void printBoard() {
-        System.out.println();
-        for (int x = 0; x < this.x_size; x++ ) {
-            for (int y = 0; y < this.y_size; y++) {
-                System.out.print("[" + this.board[x][y].getDisc().getSymbol() + "]");
-            }
-            System.out.println();
-        }
-        for (int i = 0; i < this.x_size-1; i++) {
-            System.out.print( " " + i + " ");
-        }
-        System.out.println();
-    }
-
-    //TODO change this function to boolean to check array index out of bound
-    public void addDisc(char symbol, int move) {
+    //TODO change this function to boolean to check array index out of bound (manage with exception?)
+    public boolean addDisc(char symbol, int move) {
         try {
-            for (int x = this.x_size - 1; x > -1; x--) {
+            for (int x = this.x_size - 1; x >= 0; x--) {
                 if (this.board[x][move].isFilled() == false) {
                     this.board[x][move].setDisc(symbol);
-                    break;
+                    return true;
                 }
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
+            System.err.println("Invalid position, press enter to retry.");
+            try {
+                System.in.read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
             //TODO manage exception for out of bound
         }
+        return false;
+    }
+
+    public void checkVertical() {
+
+    }
+
+    public void checkHorizontal() {
+
     }
 
     public int getySize() {

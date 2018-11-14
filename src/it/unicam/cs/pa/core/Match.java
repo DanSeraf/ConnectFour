@@ -8,12 +8,10 @@ import java.util.ArrayList;
 public class Match {
 
     private BattleGround board;
-    private ManagePlayers manage;
     private ConsolePrinter cprinter;
     private Player Winner;
     private ArrayList<Player> available_players;
     private Player[] players;
-    private Player current_player;
     private MatchStatus status = MatchStatus.PLAYING;
     private BufferedReader reader;
 
@@ -35,12 +33,17 @@ public class Match {
             System.out.print("> " + this.players[id].getUser() + " move: ");
             try {
                 int move = Integer.parseInt(this.reader.readLine());
-                this.board.addDisc(this.players[id].getSymbol(), move);
-                id = getOtherPlayer(id);
+                if (this.board.addDisc(this.players[id].getSymbol(), move) == true) {
+                    id = getOtherPlayer(id);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException ex) {
                 //TODO check invalid number insertion
+            } finally {
+      //          if (checkForWin() == true) {
+                    //TODO change matchStatus to END
+        //        }
             }
         } while(true);
     }
@@ -56,7 +59,7 @@ public class Match {
 
     /**
      * Let user select which players they want to use from the available_player ArrayList
-     * delete player choosen from available ArrayList
+     * delete player choose from available ArrayList
      * @param x number of the player
      */
     private void selectPlayer(int x) {
@@ -68,7 +71,6 @@ public class Match {
         }
         try {
             System.out.print("OPTION ");
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int opt = Integer.parseInt(this.reader.readLine());
             this.players[x-1] = this.available_players.get(opt - 1);
             this.available_players.remove(opt - 1);
@@ -77,4 +79,8 @@ public class Match {
         }
         cprinter.clear();
     }
+
+//    private boolean checkForWin() {
+
+    //}
 }
