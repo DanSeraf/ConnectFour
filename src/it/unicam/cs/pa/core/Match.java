@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Match {
 
@@ -30,22 +31,36 @@ public class Match {
         do {
             cprinter.clear();
             cprinter.printBoard(board.getxSize(), board.getySize(), board);
-            System.out.print("> " + this.players[id].getUser() + " move: ");
+            System.out.print("> " + players[id].getUser() + " move: ");
             try {
-                int move = Integer.parseInt(this.reader.readLine());
-                if (this.board.addDisc(this.players[id].getSymbol(), move) == true) {
+                int move = Integer.parseInt(reader.readLine());
+                if (board.addDisc(players[id].getSymbol(), move) == true) {
                     id = getOtherPlayer(id);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                } else { status = MatchStatus.END; }
             } catch (NumberFormatException ex) {
                 //TODO check invalid number insertion
+            } catch (IOException e) {
+                e.printStackTrace();
             } finally {
-      //          if (checkForWin() == true) {
-                    //TODO change matchStatus to END
-        //        }
+                if (this.board.isThereAWinner() == true) {
+                    cprinter.printBoard(board.getxSize(), board.getySize(), board);
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    status = MatchStatus.END;
+                }
             }
-        } while(true);
+        } while(status == MatchStatus.PLAYING);
+        cprinter.clear();
+        System.out.println("The winner is: " + players[id].getUser());
+        System.out.println("Press enter to return in the menu");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void selectPlayers() {
@@ -79,8 +94,4 @@ public class Match {
         }
         cprinter.clear();
     }
-
-//    private boolean checkForWin() {
-
-    //}
 }

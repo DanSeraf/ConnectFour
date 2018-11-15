@@ -87,16 +87,25 @@ public class Menu {
     }
 
     private void serialize_manager() {
+        FileOutputStream out_file = null;
+        ObjectOutputStream obj_file = null;
         try {
-            FileOutputStream out_file = new FileOutputStream("Manage.sav");
-            ObjectOutputStream out = new ObjectOutputStream(out_file);
-            out.writeObject(this.manage);
-            out.close();
+            out_file = new FileOutputStream("Manage.sav");
+            obj_file = new ObjectOutputStream(out_file);
+            obj_file.writeObject(this.manage);
+            obj_file.close();
             out_file.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
+            if ((obj_file) != null) {
+                try {
+                    obj_file.close();
+                    out_file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

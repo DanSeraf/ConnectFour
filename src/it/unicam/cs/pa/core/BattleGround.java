@@ -8,6 +8,7 @@ public class BattleGround {
     private Cell[][] board;
     private int x_size;
     private int y_size;
+    private boolean winner = false;
 
     public BattleGround(int x, int y) {
         this.x_size = x;
@@ -28,34 +29,100 @@ public class BattleGround {
         }
     }
 
-    //TODO change this function to boolean to check array index out of bound (manage with exception?)
-    public boolean addDisc(char symbol, int move) {
+    public boolean addDisc(char symbol, int move) throws IOException {
         try {
-            for (int x = this.x_size - 1; x >= 0; x--) {
+            for (int x = this.x_size-1; x >= 0; x--) {
                 if (this.board[x][move].isFilled() == false) {
                     this.board[x][move].setDisc(symbol);
+                    checkWinner(x--, move, symbol);
                     return true;
                 }
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.err.println("Invalid position, press enter to retry.");
-            try {
-                System.in.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.in.read();
             return false;
-            //TODO manage exception for out of bound
         }
         return false;
     }
 
-    public void checkVertical() {
-
+    private void checkWinner(int x, int y, char symbol) {
+        if (checkVertical(symbol, x, y) == true
+        || checkHorizontalDx(symbol, x, y++) == true
+        || checkDiagonalSx(symbol, x--, y--) == true
+        || checkDiagonalDx(symbol, x--, y++) == true
+        || checkHorizontalSx(symbol, x, y--) == true) {
+            this.winner = true;
+        }
     }
 
-    public void checkHorizontal() {
+    private boolean checkCount(int count) {
+        return count==4 ? true : false;
+    }
 
+    public boolean checkVertical(char symbol, int x, int y) {
+        int count = 0;
+        if (x <= (this.x_size-1)/2) {
+            for (int i = 0; i < 4; i++, x++) {
+                if (this.board[x][y].isFilled() == true && this.board[x][y].getDisc().getSymbol() == symbol) {
+                    count++;
+                } else { return false; }
+            }
+        }
+        return checkCount(count);
+    }
+
+
+    public boolean checkHorizontalDx(char symbol, int x, int y) {
+        int count = 0;
+        if (y <= (this.y_size/2) - 1) {
+            for (int i = 0; i < 4; i++, y++) {
+                if (this.board[x][y].isFilled() == true && this.board[x][y].getDisc().getSymbol() == symbol) {
+                    count++;
+                } else { return false; }
+            }
+        }
+        return checkCount(count);
+    }
+
+    public boolean checkHorizontalSx(char symbol, int x, int y) {
+        int count = 0;
+        if (y >= (this.y_size/2)) {
+            for (int i = 0; i < 4; i++, y--) {
+                if (this.board[x][y].isFilled() == true && this.board[x][y].getDisc().getSymbol() == symbol) {
+                    count++;
+                } else { return false; }
+            }
+        }
+        return checkCount(count);
+    }
+
+    public boolean checkDiagonalDx(char symbol, int x, int y) {
+        int count = 0;
+        if (x >= (this.x_size-1)/2 && y <= (this.y_size/2)-1) {
+            for (int i = 0; i < 4; i++, x++, y++) {
+                if (this.board[x][y].getDisc().getSymbol() == symbol) {
+                    count++;
+                } else { return false; }
+            }
+        }
+        return checkCount(count);
+    }
+
+    public boolean checkDiagonalSx(char symbol, int x, int y) {
+        int count = 0;
+        if (x >= (this.x_size-1)/2 && y >= (this.y_size/2)) {
+            for (int i = 0; i < 4; i++, x--, y--) {
+                if (this.board[x][y].getDisc().getSymbol() == symbol) {
+                    count++;
+                } else { return false; }
+            }
+        }
+        return checkCount(count);
+    }
+
+    public boolean isThereAWinner() {
+        return this.winner;
     }
 
     public int getySize() {

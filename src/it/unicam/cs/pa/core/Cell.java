@@ -9,13 +9,13 @@ public class Cell {
         this.disc = new Disc();
     }
 
-    public Disc getDisc() {
-        return disc;
-    }
-
     public void setDisc(char symbol) {
         this.disc.setSymbol(symbol);
         this.filled = true;
+    }
+
+    public Disc getDisc() {
+        return disc;
     }
 
     public boolean isFilled() {

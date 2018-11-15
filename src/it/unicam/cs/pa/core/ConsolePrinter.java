@@ -12,7 +12,7 @@ public class ConsolePrinter {
         System.out.println();
         for (int x = 0; x < x_size; x++ ) {
             for (int y = 0; y < y_size; y++) {
-                System.out.print("[" + bg.getBoard()[x][y].getDisc().getSymbol() + "]");
+                System.out.print("|" + bg.getBoard()[x][y].getDisc().getSymbol() + "|");
             }
             System.out.println();
         }
