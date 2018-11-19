@@ -4,11 +4,20 @@ public class ConsolePrinter {
 
     public ConsolePrinter() {};
 
-    public void clear() {
+    /**
+     * clean the screen and go up to the console
+     */
+    public void clean() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+     * print the board in a fashion format
+     * @param x_size row size of board
+     * @param y_size column size of board
+     * @param bg Battleground object
+     */
     public void printBoard(int x_size, int y_size, BattleGround bg) {
         System.out.println();
         for (int x = 0; x < x_size; x++ ) {
