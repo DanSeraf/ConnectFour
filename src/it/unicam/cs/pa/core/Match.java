@@ -16,9 +16,9 @@ public class Match {
     private MatchStatus status = MatchStatus.PLAYING;
     private BufferedReader reader;
 
-    public Match(ManagePlayers manage) {
+    public Match(Settings settings) {
         this.board = new BattleGround();
-        this.available_players = manage.getPlayers();
+        this.available_players = settings.getPlayers();
         this.cprinter = new ConsolePrinter();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
@@ -31,18 +31,19 @@ public class Match {
         do {
             cprinter.clear();
             cprinter.printBoard(board.getxSize(), board.getySize(), board);
-            System.out.print("> " + players[id].getUser() + " move: ");
+            System.out.print(">" + players[id].getUser() + " move: ");
             try {
                 int move = Integer.parseInt(reader.readLine());
-                if (board.addDisc(players[id].getSymbol(), move) == true) {
-                    id = getOtherPlayer(id);
-                } else { status = MatchStatus.END; }
+                if (board.addDisc(players[id].getSymbol(), move) == false) {
+                    continue;
+                }
             } catch (NumberFormatException ex) {
                 //TODO check invalid number insertion
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 if (this.board.isThereAWinner() == true) {
+                    cprinter.clear();
                     cprinter.printBoard(board.getxSize(), board.getySize(), board);
                     try {
                         TimeUnit.SECONDS.sleep(2);
@@ -50,12 +51,12 @@ public class Match {
                         e.printStackTrace();
                     }
                     status = MatchStatus.END;
-                }
+                } else { id = getOtherPlayer(id); }
             }
         } while(status == MatchStatus.PLAYING);
         cprinter.clear();
         System.out.println("The winner is: " + players[id].getUser());
-        System.out.println("Press enter to return in the menu");
+        System.out.println("Press enter to return in menu");
         try {
             System.in.read();
         } catch (IOException e) {
@@ -63,35 +64,34 @@ public class Match {
         }
     }
 
-    private void selectPlayers() {
-        selectPlayer(1);
-        selectPlayer(2);
-    }
-
     public static int getOtherPlayer(int id) {
         return (id+1)%2;
+    }
+
+    private void selectPlayers() {
+        try {
+            selectPlayer(1);
+            selectPlayer(2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Let user select which players they want to use from the available_player ArrayList
      * delete player choose from available ArrayList
-     * @param x number of the player
+     * @param n number of the player
      */
-    private void selectPlayer(int x) {
-        int index = 1;
-        System.out.println("Player " + x + " select available player:");
-        for (Player player :
-                this.available_players) {
-            System.out.println("[" + index++ + "] " + player.getUser() + " - (" + player.getSymbol() + ")");
-        }
-        try {
-            System.out.print("OPTION ");
-            int opt = Integer.parseInt(this.reader.readLine());
-            this.players[x-1] = this.available_players.get(opt - 1);
-            this.available_players.remove(opt - 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void selectPlayer(int n) throws IOException {
+        int[] index = new int[]{1};
+        System.out.println("PLAYER " + n + " select available player:");
+        this.available_players.forEach(player ->
+            System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getSymbol() + ")")
+        );
+        System.out.print("OPTION ");
+        int opt = Integer.parseInt(this.reader.readLine());
+        this.players[n-1] = this.available_players.get(opt - 1);
+        this.available_players.remove(opt - 1);
         cprinter.clear();
     }
 }

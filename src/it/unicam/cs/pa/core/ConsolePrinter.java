@@ -1,6 +1,7 @@
 package it.unicam.cs.pa.core;
 
 public class ConsolePrinter {
+
     public ConsolePrinter() {};
 
     public void clear() {
