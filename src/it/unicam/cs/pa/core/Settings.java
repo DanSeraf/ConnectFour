@@ -8,13 +8,14 @@ import java.util.function.BiPredicate;
 /**
  *
  * Settings
- * let user add new player
- * this class is serializable because a Settings.sav will be created to save this object
+ * it stores players and boards
+ * TODO (feature) add new boards
  *
  */
 
 public class Settings {
 
+    // list of players that can be used
     private ArrayList<Player> players;
     // Check if new player has the same symbol of another player
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getSymbol()==c;
@@ -23,6 +24,10 @@ public class Settings {
         restorePlayers();
     }
 
+    /**
+     * add new player to the game
+     * ask for name and symbol
+     */
     public void addNewPlayer() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Username of new player? ");
@@ -35,6 +40,11 @@ public class Settings {
         serializePlayers();
     }
 
+    /**
+     *
+     * @param symbol symbol of new player
+     * @return true if another player has the same symbol
+     */
     private boolean checkSym(char symbol) {
         for (Player player : this.players) {
             if (this.sym_check.test(player, symbol)) {
@@ -55,7 +65,6 @@ public class Settings {
      * @param symbol symbol that identify the player
      * @param username username of the player
      */
-
     private void createPlayer(char symbol, String username) {
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
@@ -82,6 +91,9 @@ public class Settings {
         }
     }
 
+    /**
+     * check if Players.sav exist
+     */
     private void restorePlayers() {
         File f = new File("Players.sav");
         if(f.exists() && !f.isDirectory()) {
@@ -92,9 +104,8 @@ public class Settings {
     }
 
     /**
-     * view players saved in Settings.sav
+     * view players saved in Players.sav
      */
-
     public void viewPlayers() throws IOException {
         System.out.println("Players:");
         this.players.forEach(player ->
@@ -103,6 +114,11 @@ public class Settings {
         System.out.println("Press Enter to continue");
         System.in.read();
     }
+
+    /**
+     * serialize players ArrayList
+     * it will be saved in the current working directory
+     */
 
     private void serializePlayers() {
         FileOutputStream out_file = null;
@@ -125,6 +141,9 @@ public class Settings {
         }
     }
 
+    /**
+     * load players serialized in Players.sav
+     */
     private void deserializePlayers() {
         FileInputStream input_file = null;
         ObjectInputStream obj_file = null;

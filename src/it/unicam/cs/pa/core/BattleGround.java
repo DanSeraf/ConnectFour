@@ -80,7 +80,13 @@ public class BattleGround {
         return false;
     }
 
-    public boolean checkDiagonalByRow(char symbol) {
+    /**
+     * check board diagonally from left to right and vice versa
+     * @param symbol symbol that will be added
+     * @return true if four symbol have been found
+     */
+
+    public boolean checkDiagonalLr(char symbol) {
         int count = 0;
         for (int row = 0; row < this.x_size-3; row++) {
 
@@ -88,8 +94,19 @@ public class BattleGround {
         return false;
     }
 
-    public boolean isFull() {
-        //TODO check if board is full
+    /**
+     * check if board is completely filled
+     * in that case, exit the game
+     * @return true if board is full
+     */
+    public boolean isBoardFull() {
+        for (int x = 0; x < this.x_size; x++) {
+            for (int y = 0; y < this.y_size; y++) {
+                if (!this.board[x][y].isFilled()) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 

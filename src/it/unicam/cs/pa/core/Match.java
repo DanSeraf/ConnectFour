@@ -24,16 +24,19 @@ public class Match {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     * match initialization, selectPlayers is used to let the player choose for a character stored in settings
+     */
     public void start() {
         selectPlayers();
         int id = 0;
         //TODO Select board size
         do {
-            cprinter.clear();
+            cprinter.clean();
             cprinter.printBoard(board.getxSize(), board.getySize(), board);
             System.out.print(">" + players[id].getUser() + " move: ");
             try {
-                int move = Integer.parseInt(reader.readLine());
+                int move = players[id].getMove();
                 if (board.addDisc(players[id].getSymbol(), move) == false) {
                     continue;
                 }
@@ -43,7 +46,7 @@ public class Match {
                 e.printStackTrace();
             } finally {
                 if (this.board.isThereAWinner() == true) {
-                    cprinter.clear();
+                    cprinter.clean();
                     cprinter.printBoard(board.getxSize(), board.getySize(), board);
                     try {
                         TimeUnit.SECONDS.sleep(2);
@@ -54,7 +57,7 @@ public class Match {
                 } else { id = getOtherPlayer(id); }
             }
         } while(status == MatchStatus.PLAYING);
-        cprinter.clear();
+        cprinter.clean();
         System.out.println("The winner is: " + players[id].getUser());
         System.out.println("Press enter to return in menu");
         try {
@@ -92,6 +95,6 @@ public class Match {
         int opt = Integer.parseInt(this.reader.readLine());
         this.players[n-1] = this.available_players.get(opt - 1);
         this.available_players.remove(opt - 1);
-        cprinter.clear();
+        cprinter.clean();
     }
 }

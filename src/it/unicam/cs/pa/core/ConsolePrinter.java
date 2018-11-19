@@ -1,5 +1,10 @@
 package it.unicam.cs.pa.core;
 
+/**
+ * it prints the board is after a player's move
+ * and clean the screen before to print the board
+ */
+
 public class ConsolePrinter {
 
     public ConsolePrinter() {};
