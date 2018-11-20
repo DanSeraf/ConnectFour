@@ -14,7 +14,7 @@ public class Menu {
         this.cprinter = new ConsolePrinter();
     }
 
-    public void showMenu() {
+    public void show() {
         do {
             cprinter.clean();
             System.out.println("[1] Play");

@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 public class Match {
 
     private BattleGround board;
-    private ConsolePrinter cprinter;
-    private Player Winner;
+    private ConsolePrinter printer;
+    private Player winner;
     private ArrayList<Player> available_players;
     private Player[] players;
     private MatchStatus status = MatchStatus.PLAYING;
@@ -19,33 +19,38 @@ public class Match {
     public Match(Settings settings) {
         this.board = new BattleGround();
         this.available_players = settings.getPlayers();
-        this.cprinter = new ConsolePrinter();
+        this.printer = new ConsolePrinter();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
     /**
-     * match initialization, selectPlayers is used to let the player choose for a character stored in settings
+     * match initialization
+     * selectPlayers is used to let the player choose for a character stored in settings
+     * inside the loop, a move is taken from the player and inserted into the board
+     * based on the response of the board, the player will change with getOtherPlayer
+     * the game finish when there is winner, it is checked by the Battleground
      */
     public void start() {
         selectPlayers();
         int id = 0;
         //TODO Select board size
         do {
-            cprinter.clean();
-            cprinter.printBoard(board.getxSize(), board.getySize(), board);
+            printer.clean();
+            printer.printBoard(board.getxSize(), board.getySize(), board);
             try {
                 int move = players[id].getMove();
                 // check for a valid move
                 if (board.addDisc(players[id].getSymbol(), move) == false) {
                     continue;
-                }
+                } else { id = getOtherPlayer(id); }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 if (this.board.isThereAWinner() == true) {
-                    cprinter.clean();
-                    cprinter.printBoard(board.getxSize(), board.getySize(), board);
+                    this.winner = players[getOtherPlayer(id)];
+                    printer.clean();
+                    printer.printBoard(board.getxSize(), board.getySize(), board);
                     try {
                         TimeUnit.SECONDS.sleep(2);
                     } catch (InterruptedException e) {
@@ -53,17 +58,17 @@ public class Match {
                     }
                     // change MatchStatus to END if someone win
                     status = MatchStatus.END;
-                } else { id = getOtherPlayer(id); }
+                }
             }
         } while(status == MatchStatus.PLAYING);
         if (board.isFull() == false) {
-            printWinner(players[id]);
+            printWinner();
         }
     }
 
-    private void printWinner(Player p) {
-        cprinter.clean();
-        System.out.println("The winner is: " + p.getUser());
+    private void printWinner() {
+        printer.clean();
+        System.out.println("The winner is: " + this.winner.getUser());
         System.out.println("Press enter to return in menu");
         try {
             System.in.read();
@@ -72,6 +77,9 @@ public class Match {
         }
     }
 
+    /**
+     * change the player
+     */
     public static int getOtherPlayer(int id) {
         return (id+1)%2;
     }
@@ -86,8 +94,8 @@ public class Match {
     }
 
     /**
-     * Let user select which players they want to use from the available_player ArrayList
-     * delete player choose from available ArrayList
+     * Let user select which character they want to use from the available_players ArrayList
+     * delete the chosen player from available_players
      * @param n number of the player
      */
     private void selectPlayer(int n) throws IOException {
@@ -100,6 +108,6 @@ public class Match {
         int opt = Integer.parseInt(this.reader.readLine());
         this.players[n-1] = this.available_players.get(opt - 1);
         this.available_players.remove(opt - 1);
-        cprinter.clean();
+        printer.clean();
     }
 }

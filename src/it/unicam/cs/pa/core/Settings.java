@@ -8,8 +8,9 @@ import java.util.function.BiPredicate;
 /**
  *
  * Settings
- * it stores players characters and boards size
+ * it stores the players characters and the boards size
  * TODO (feature) add new boards
+ * TODO remove character
  *
  */
 
@@ -69,16 +70,16 @@ public class Settings {
     private void createPlayer(char symbol, String username) {
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
+        System.out.println("[2] Random Player");
         try {
             int option = Integer.parseInt(this.reader.readLine());
             switch(option) {
                 case 1:
                     this.players.add(new HumanPlayer(symbol, username));
                     break;
-                /**
-                 * TODO Implement other player classes
-                 * case 2: Player p = new AI();
-                 */
+                case 2:
+                    this.players.add(new RandomPlayer(symbol, username));
+                    break;
                 default: System.out.println("Invalid option");
                     System.out.println("Press enter to continue");
                     System.in.read();

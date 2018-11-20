@@ -40,7 +40,9 @@ public class BattleGround {
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.err.println("Invalid position, press enter to retry.");
+            System.out.println(move);
             System.in.read();
+            return false;
         }
         return false;
     }
