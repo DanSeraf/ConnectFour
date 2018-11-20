@@ -36,7 +36,7 @@ public class Settings {
         String username = scanner.nextLine();
         System.out.println("Which symbol do you want to use? ");
         char symbol = scanner.next().charAt(0);
-        if (checkSym(symbol) == false) {
+        if (checkSym(symbol) == false && (!username.isEmpty() || symbol != ' ')) {
             createPlayer(symbol, username);
         }
     }
