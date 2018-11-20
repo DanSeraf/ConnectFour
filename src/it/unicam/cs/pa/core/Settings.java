@@ -8,7 +8,7 @@ import java.util.function.BiPredicate;
 /**
  *
  * Settings
- * it stores players and boards
+ * it stores players characters and boards size
  * TODO (feature) add new boards
  *
  */
@@ -19,6 +19,7 @@ public class Settings {
     private ArrayList<Player> players;
     // Check if new player has the same symbol of another player
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getSymbol()==c;
+    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public Settings() {
         restorePlayers();
@@ -37,18 +38,18 @@ public class Settings {
         if (checkSym(symbol) == false) {
             createPlayer(symbol, username);
         }
-        serializePlayers();
     }
 
     /**
-     *
+     * check if player has the same symbol of a saved player
      * @param symbol symbol of new player
      * @return true if another player has the same symbol
      */
     private boolean checkSym(char symbol) {
         for (Player player : this.players) {
             if (this.sym_check.test(player, symbol)) {
-                System.out.println("Another player has the same symbol, press Enter to exit");
+                System.out.println("Another player has the same symbol");
+                System.out.println("Press Enter to exit");
                 try {
                     System.in.read();
                     return true;
@@ -69,12 +70,10 @@ public class Settings {
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
         try {
-            BufferedReader buff_reader = new BufferedReader(new InputStreamReader(System.in));
-            int option = Integer.parseInt(buff_reader.readLine());
+            int option = Integer.parseInt(this.reader.readLine());
             switch(option) {
                 case 1:
-                    Player new_player_obj = new HumanPlayer(symbol, username);
-                    this.players.add(new_player_obj);
+                    this.players.add(new HumanPlayer(symbol, username));
                     break;
                 /**
                  * TODO Implement other player classes
@@ -88,11 +87,13 @@ public class Settings {
             System.out.println("Not a number");
         } catch(IOException e) {
             e.printStackTrace();
+        } finally {
+            serializePlayers();
         }
     }
 
     /**
-     * check if Players.sav exist
+     * check if Players.sav exists
      */
     private void restorePlayers() {
         File f = new File("Players.sav");
@@ -104,7 +105,7 @@ public class Settings {
     }
 
     /**
-     * view players saved in Players.sav
+     * view players
      */
     public void viewPlayers() throws IOException {
         System.out.println("Players:");
@@ -119,7 +120,6 @@ public class Settings {
      * serialize players ArrayList
      * it will be saved in the current working directory
      */
-
     private void serializePlayers() {
         FileOutputStream out_file = null;
         ObjectOutputStream obj_file = null;

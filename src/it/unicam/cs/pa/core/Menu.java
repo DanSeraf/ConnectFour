@@ -36,7 +36,8 @@ public class Menu {
                     case 3: cprinter.clean();
                         this.settings.viewPlayers();
                         continue;
-                    case 4: System.exit(0);
+                    case 4: cprinter.clean();
+                        System.exit(0);
                     default: System.out.println("Invalid option");
                         System.out.println("Press enter to continue");
                         System.in.read();

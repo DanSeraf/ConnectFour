@@ -41,7 +41,6 @@ public class BattleGround {
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.err.println("Invalid position, press enter to retry.");
             System.in.read();
-            return false;
         }
         return false;
     }
@@ -99,7 +98,7 @@ public class BattleGround {
      * in that case, exit the game
      * @return true if board is full
      */
-    public boolean isBoardFull() {
+    public boolean isFull() {
         for (int x = 0; x < this.x_size; x++) {
             for (int y = 0; y < this.y_size; y++) {
                 if (!this.board[x][y].isFilled()) {

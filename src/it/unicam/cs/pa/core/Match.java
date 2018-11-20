@@ -34,14 +34,12 @@ public class Match {
         do {
             cprinter.clean();
             cprinter.printBoard(board.getxSize(), board.getySize(), board);
-            System.out.print(">" + players[id].getUser() + " move: ");
             try {
                 int move = players[id].getMove();
+                // check for a valid move
                 if (board.addDisc(players[id].getSymbol(), move) == false) {
                     continue;
                 }
-            } catch (NumberFormatException ex) {
-                //TODO check invalid number insertion
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -53,12 +51,19 @@ public class Match {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    // change MatchStatus to END if someone win
                     status = MatchStatus.END;
                 } else { id = getOtherPlayer(id); }
             }
         } while(status == MatchStatus.PLAYING);
+        if (board.isFull() == false) {
+            printWinner(players[id]);
+        }
+    }
+
+    private void printWinner(Player p) {
         cprinter.clean();
-        System.out.println("The winner is: " + players[id].getUser());
+        System.out.println("The winner is: " + p.getUser());
         System.out.println("Press enter to return in menu");
         try {
             System.in.read();
