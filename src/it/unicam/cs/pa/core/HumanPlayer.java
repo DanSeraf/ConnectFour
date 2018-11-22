@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 
 public class HumanPlayer extends AbstractPlayer implements Player {
 
-    private final char symbol;
     private String username;
+    private Disc disc;
 
-    public HumanPlayer(char symbol, String username) {
-        this.symbol = symbol;
+    public HumanPlayer(char symbol, String username, DiscColors color) {
         this.username = username;
+        this.disc = new Disc(symbol, color);
     }
 
     @Override
@@ -21,12 +21,12 @@ public class HumanPlayer extends AbstractPlayer implements Player {
     }
 
     @Override
-    public char getSymbol() {
-        return this.symbol;
+    public String getUser() {
+        return this.username;
     }
 
     @Override
-    public String getUser() {
-        return this.username;
+    public Disc getDisc() {
+        return this.disc;
     }
 }

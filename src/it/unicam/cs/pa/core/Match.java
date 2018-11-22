@@ -41,7 +41,7 @@ public class Match {
                 System.out.print(">" + this.players[id].getUser() + " move: ");
                 int move = players[id].getMove();
                 // check for a valid move
-                if (board.addDisc(players[id].getSymbol(), move) == false) {
+                if (board.addDisc(players[id], move) == false) {
                     continue;
                 } else { id = getOtherPlayer(id); }
             } catch (IOException e) {
@@ -94,7 +94,7 @@ public class Match {
         int[] index = new int[]{1};
         System.out.println("PLAYER " + n + " select available player:");
         this.available_players.forEach(player ->
-            System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getSymbol() + ")")
+            System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
         );
         System.out.print("OPTION ");
         int opt = Integer.parseInt(this.reader.readLine());

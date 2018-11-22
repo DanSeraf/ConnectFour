@@ -7,7 +7,6 @@ package it.unicam.cs.pa.core;
 
 public class ConsolePrinter {
 
-    private static final String CYAN = "\u001B[36m";
     private static final String RESET = "\u001B[0m";
     private String row_del = "o---o---o---o---o---o---o---o";
 
@@ -26,6 +25,7 @@ public class ConsolePrinter {
      * @param board Battleground object
      */
     public void printBoard(BattleGround board) {
+        Cell[][] bg = board.getBoard();
         for (int i = 0; i < board.getySize(); i++) {
             System.out.print("  " + i + " ");
         }
@@ -33,8 +33,11 @@ public class ConsolePrinter {
         for ( int x = 0; x < board.getxSize(); x++){
             System.out.println(row_del);
             for ( int y=0; y < board.getySize(); y++){
-                System.out.print("| "+ CYAN + board.getBoard()[x][y].getDisc().getSymbol()+ RESET + " ");
-
+                if (bg[x][y].isFilled() == true) {
+                    System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
+                } else {
+                    System.out.print("|   ");
+                }
             }
             System.out.print("|");
             System.out.println();

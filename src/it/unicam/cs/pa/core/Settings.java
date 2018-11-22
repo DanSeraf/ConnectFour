@@ -19,7 +19,7 @@ public class Settings {
     // list of players that can be used
     private ArrayList<Player> players;
     // Check if new player has the same symbol of another player
-    private BiPredicate<Player, Character> sym_check = (p, c) -> p.getSymbol()==c;
+    private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public Settings() {
@@ -32,13 +32,51 @@ public class Settings {
      */
     public void addNewPlayer() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Username of new player? ");
+        System.out.println("Choose one username");
         String username = scanner.nextLine();
-        System.out.println("Which symbol do you want to use? ");
+        System.out.println("Choose one character");
         char symbol = scanner.next().charAt(0);
+        DiscColors color = getDiscColor(scanner);
         if (checkSym(symbol) == false && (!username.isEmpty() || symbol != ' ')) {
-            createPlayer(symbol, username);
+            createPlayer(symbol, username, color);
         }
+    }
+
+    private DiscColors getDiscColor(Scanner scanner) {
+        System.out.println("Select the color you want to use.");
+        System.out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
+        int opt;
+        do {
+            opt = scanner.nextInt();
+            if (opt < 8 && opt > 0 ) {
+                break;
+            } else {
+                try {
+                    System.out.println("Invalid number, Enter to retry.");
+                    System.in.read();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } while(true);
+
+        switch (opt) {
+            case 1:
+                return DiscColors.RED;
+            case 2:
+                return DiscColors.GREEN;
+            case 3:
+                return DiscColors.YELLOW;
+            case 4:
+                return DiscColors.BLUE;
+            case 5:
+                return DiscColors.PURPLE;
+            case 6:
+                return DiscColors.CYAN;
+            case 7:
+                return DiscColors.WHITE;
+        }
+        return DiscColors.WHITE;
     }
 
     /**
@@ -67,7 +105,7 @@ public class Settings {
      * @param symbol symbol that identify the player
      * @param username username of the player
      */
-    private void createPlayer(char symbol, String username) {
+    private void createPlayer(char symbol, String username, DiscColors color) {
         System.out.println("Select type of new player");
         System.out.println("[1] Human Player");
         System.out.println("[2] Random Player");
@@ -75,10 +113,10 @@ public class Settings {
             int option = Integer.parseInt(this.reader.readLine());
             switch(option) {
                 case 1:
-                    this.players.add(new HumanPlayer(symbol, username));
+                    this.players.add(new HumanPlayer(symbol, username, color));
                     break;
                 case 2:
-                    this.players.add(new RandomPlayer(symbol, username));
+                    this.players.add(new RandomPlayer(symbol, username, color));
                     break;
                 default: System.out.println("Invalid option");
                     System.out.println("Press enter to continue");
@@ -109,9 +147,10 @@ public class Settings {
      * view players
      */
     public void viewPlayers() throws IOException {
+        final String RESET = "\u001B[0m";
         System.out.println("Players:");
         this.players.forEach(player ->
-            System.out.println("(" + player.getSymbol() + ") - " + player.getUser())
+            System.out.println("(" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + ") - " + player.getUser())
         );
         System.out.println("Press Enter to continue");
         System.in.read();

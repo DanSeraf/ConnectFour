@@ -1,7 +1,14 @@
 package it.unicam.cs.pa.core;
 
-public class Disc {
-    private char symbol = ' ';
+public class Disc extends AbstractDisc{
+
+    private DiscColors color;
+    private char symbol;
+
+    public Disc(char symbol, DiscColors color) {
+        this.symbol = symbol;
+        this.color = color;
+    }
 
     public Disc() {
     }
@@ -10,7 +17,7 @@ public class Disc {
         return this.symbol;
     }
 
-    public void setSymbol(char symbol) {
-        this.symbol = symbol;
+    public String getColor() {
+        return this.color.toString();
     }
 }

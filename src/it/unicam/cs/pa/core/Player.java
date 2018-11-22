@@ -6,8 +6,8 @@ public interface Player {
 
     int getMove() throws IOException;
 
-    char getSymbol();
-
     String getUser();
+
+    Disc getDisc();
 
 }

@@ -29,12 +29,12 @@ public class BattleGround {
         }
     }
 
-    public boolean addDisc(char symbol, int move) throws IOException {
+    public boolean addDisc(Player player, int move) throws IOException {
         try {
             for (int x = this.x_size-1; x >= 0; x--) {
                 if (this.board[x][move].isFilled() == false) {
-                    this.board[x][move].setDisc(symbol);
-                    checkWinner(x, move, symbol);
+                    this.board[x][move].setDisc(player.getDisc());
+                    checkWinner(x, move, player.getDisc().getSymbol());
                     return true;
                 }
             }
