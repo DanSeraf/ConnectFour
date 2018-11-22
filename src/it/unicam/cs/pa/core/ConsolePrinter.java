@@ -7,6 +7,10 @@ package it.unicam.cs.pa.core;
 
 public class ConsolePrinter {
 
+    private static final String CYAN = "\u001B[36m";
+    private static final String RESET = "\u001B[0m";
+    private String row_del = "o---o---o---o---o---o---o---o";
+
     public ConsolePrinter() {};
 
     /**
@@ -19,21 +23,23 @@ public class ConsolePrinter {
 
     /**
      * print the board in a fashion format
-     * @param x_size row size of board
-     * @param y_size column size of board
-     * @param bg Battleground object
+     * @param board Battleground object
      */
-    public void printBoard(int x_size, int y_size, BattleGround bg) {
+    public void printBoard(BattleGround board) {
+        for (int i = 0; i < board.getySize(); i++) {
+            System.out.print("  " + i + " ");
+        }
         System.out.println();
-        for (int x = 0; x < x_size; x++ ) {
-            for (int y = 0; y < y_size; y++) {
-                System.out.print("|" + bg.getBoard()[x][y].getDisc().getSymbol() + "|");
+        for ( int x = 0; x < board.getxSize(); x++){
+            System.out.println(row_del);
+            for ( int y=0; y < board.getySize(); y++){
+                System.out.print("| "+ CYAN + board.getBoard()[x][y].getDisc().getSymbol()+ RESET + " ");
+
             }
+            System.out.print("|");
             System.out.println();
         }
-        for (int i = 0; i < x_size-1; i++) {
-            System.out.print( " " + i + " ");
-        }
+        System.out.println(row_del);
         System.out.println();
     }
 }

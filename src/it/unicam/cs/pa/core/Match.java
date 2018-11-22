@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Match {
 
@@ -37,8 +36,9 @@ public class Match {
         //TODO Select board size
         do {
             printer.clean();
-            printer.printBoard(board.getxSize(), board.getySize(), board);
+            printer.printBoard(board);
             try {
+                System.out.print(">" + this.players[id].getUser() + " move: ");
                 int move = players[id].getMove();
                 // check for a valid move
                 if (board.addDisc(players[id].getSymbol(), move) == false) {
@@ -47,27 +47,19 @@ public class Match {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if (this.board.isThereAWinner() == true) {
+                if (this.board.isThereAWinner() == true && !board.isFull()) {
                     this.winner = players[getOtherPlayer(id)];
-                    printer.clean();
-                    printer.printBoard(board.getxSize(), board.getySize(), board);
-                    try {
-                        TimeUnit.SECONDS.sleep(2);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    // change MatchStatus to END if someone win
+                    printer.printBoard(board);
                     status = MatchStatus.END;
                 }
             }
         } while(status == MatchStatus.PLAYING);
-        if (board.isFull() == false) {
-            printWinner();
-        }
+        printWinner();
     }
 
     private void printWinner() {
         printer.clean();
+        printer.printBoard(board);
         System.out.println("The winner is: " + this.winner.getUser());
         System.out.println("Press enter to return in menu");
         try {

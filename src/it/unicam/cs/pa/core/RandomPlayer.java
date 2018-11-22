@@ -1,6 +1,7 @@
 package it.unicam.cs.pa.core;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class RandomPlayer extends AbstractPlayer implements Player {
 
@@ -14,7 +15,12 @@ public class RandomPlayer extends AbstractPlayer implements Player {
 
     @Override
     public int getMove() {
-        return ThreadLocalRandom.current().nextInt(0, 5);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return ThreadLocalRandom.current().nextInt(0, 7);
     }
 
     @Override

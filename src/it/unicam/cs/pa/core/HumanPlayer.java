@@ -17,7 +17,6 @@ public class HumanPlayer extends AbstractPlayer implements Player {
     @Override
     public int getMove() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print(">" + this.username + " move: ");
         return Integer.parseInt(reader.readLine());
     }
 
