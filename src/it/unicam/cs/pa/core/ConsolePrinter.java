@@ -8,7 +8,8 @@ package it.unicam.cs.pa.core;
 public class ConsolePrinter {
 
     private static final String RESET = "\u001B[0m";
-    private String row_del = "o---o---o---o---o---o---o---o";
+    private String row_del = "o---";
+    private String row_end = "o\n";
 
     public ConsolePrinter() {};
 
@@ -31,7 +32,7 @@ public class ConsolePrinter {
         }
         System.out.println();
         for ( int x = 0; x < board.getxSize(); x++){
-            System.out.println(row_del);
+            printDel(board.getySize());
             for ( int y=0; y < board.getySize(); y++){
                 if (bg[x][y].isFilled() == true) {
                     System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
@@ -42,7 +43,13 @@ public class ConsolePrinter {
             System.out.print("|");
             System.out.println();
         }
-        System.out.println(row_del);
-        System.out.println();
+        printDel(board.getySize());
+    }
+
+    private void printDel(int n) {
+        for (int i = 0; i < n; i++) {
+            System.out.print(row_del);
+        }
+        System.out.print(row_end);
     }
 }
