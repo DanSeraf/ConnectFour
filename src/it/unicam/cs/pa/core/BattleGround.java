@@ -1,5 +1,8 @@
 package it.unicam.cs.pa.core;
 
+import it.unicam.cs.pa.player.Player;
+import it.unicam.cs.pa.player.RandomPlayer;
+
 import java.io.IOException;
 
 public class BattleGround {

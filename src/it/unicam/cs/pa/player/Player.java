@@ -1,4 +1,6 @@
-package it.unicam.cs.pa.core;
+package it.unicam.cs.pa.player;
+
+import it.unicam.cs.pa.core.Disc;
 
 import java.io.IOException;
 

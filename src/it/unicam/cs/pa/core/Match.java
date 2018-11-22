@@ -1,5 +1,7 @@
 package it.unicam.cs.pa.core;
 
+import it.unicam.cs.pa.player.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

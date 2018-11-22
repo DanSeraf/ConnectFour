@@ -1,5 +1,8 @@
 package it.unicam.cs.pa.core;
 
+import it.unicam.cs.pa.player.HumanPlayer;
+import it.unicam.cs.pa.player.RandomPlayer;
+import it.unicam.cs.pa.player.Player;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
