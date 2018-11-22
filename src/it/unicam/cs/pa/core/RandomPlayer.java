@@ -7,10 +7,15 @@ public class RandomPlayer extends AbstractPlayer implements Player {
 
     private String username;
     private Disc disc;
+    private Cell[][] board;
 
     public RandomPlayer(char symbol, String username, DiscColors color) {
         this.username = username;
         this.disc = new Disc(symbol, color);
+    }
+
+    public void updateBoard(Cell[][] board) {
+        this.board = board;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package it.unicam.cs.pa.core;
 
-import java.io.Serializable;
-
-public enum DiscColors implements Serializable {
+public enum DiscColors {
     RED,
     GREEN,
     YELLOW,
@@ -11,6 +9,9 @@ public enum DiscColors implements Serializable {
     CYAN,
     WHITE;
 
+    /**
+     * return ANSI escape codes based on color chosen
+     */
     @Override
     public String toString() {
         switch ( this ) {

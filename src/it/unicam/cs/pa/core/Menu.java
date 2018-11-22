@@ -19,8 +19,9 @@ public class Menu {
             cprinter.clean();
             System.out.println("[1] Play");
             System.out.println("[2] Add Player");
-            System.out.println("[3] View Players");
-            System.out.println("[4] Exit");
+            System.out.println("[3] Remove Player");
+            System.out.println("[4] View Players");
+            System.out.println("[5] Exit");
             System.out.print("OPTION ");
             try {
                 BufferedReader buff_reader = new BufferedReader(new InputStreamReader(System.in));
@@ -28,15 +29,20 @@ public class Menu {
                 switch(option) {
                     case 1: cprinter.clean();
                         Match match = new Match(this.settings);
-                        match.start();
+                        if (match.allRight() == true) {
+                            match.start();
+                        }
                         continue;
                     case 2: cprinter.clean();
                         this.settings.addNewPlayer();
                         continue;
                     case 3: cprinter.clean();
-                        this.settings.viewPlayers();
+                        this.settings.deletePlayer();
                         continue;
                     case 4: cprinter.clean();
+                        this.settings.viewPlayers();
+                        continue;
+                    case 5: cprinter.clean();
                         System.exit(0);
                     default: System.out.println("Invalid option");
                         System.out.println("Press enter to continue");

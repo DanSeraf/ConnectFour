@@ -35,6 +35,9 @@ public class BattleGround {
                 if (this.board[x][move].isFilled() == false) {
                     this.board[x][move].setDisc(player.getDisc());
                     checkWinner(x, move, player.getDisc().getSymbol());
+                    if (player instanceof RandomPlayer) {
+                        ((RandomPlayer) player).updateBoard(this.board);
+                    }
                     return true;
                 }
             }

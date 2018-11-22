@@ -34,49 +34,44 @@ public class Settings {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose one username");
         String username = scanner.nextLine();
+        DiscColors color = getDiscColor(scanner);
         System.out.println("Choose one character");
         char symbol = scanner.next().charAt(0);
-        DiscColors color = getDiscColor(scanner);
         if (checkSym(symbol) == false && (!username.isEmpty() || symbol != ' ')) {
             createPlayer(symbol, username, color);
         }
     }
 
     private DiscColors getDiscColor(Scanner scanner) {
-        System.out.println("Select the color you want to use.");
-        System.out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
-        int opt;
-        do {
-            opt = scanner.nextInt();
-            if (opt < 8 && opt > 0 ) {
-                break;
-            } else {
-                try {
-                    System.out.println("Invalid number, Enter to retry.");
-                    System.in.read();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        while (true) {
+            System.out.println("Select the color you want to use.");
+            System.out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
+            int opt = scanner.nextInt();
+            try {
+                switch (opt) {
+                    case 1:
+                        return DiscColors.RED;
+                    case 2:
+                        return DiscColors.GREEN;
+                    case 3:
+                        return DiscColors.YELLOW;
+                    case 4:
+                        return DiscColors.BLUE;
+                    case 5:
+                        return DiscColors.PURPLE;
+                    case 6:
+                        return DiscColors.CYAN;
+                    case 7:
+                        return DiscColors.WHITE;
+                    default:
+                        System.out.println("Invalid option");
+                        System.out.println("Press enter to continue");
+                        System.in.read();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } while(true);
-
-        switch (opt) {
-            case 1:
-                return DiscColors.RED;
-            case 2:
-                return DiscColors.GREEN;
-            case 3:
-                return DiscColors.YELLOW;
-            case 4:
-                return DiscColors.BLUE;
-            case 5:
-                return DiscColors.PURPLE;
-            case 6:
-                return DiscColors.CYAN;
-            case 7:
-                return DiscColors.WHITE;
         }
-        return DiscColors.WHITE;
     }
 
     /**
@@ -150,10 +145,26 @@ public class Settings {
         final String RESET = "\u001B[0m";
         System.out.println("Players:");
         this.players.forEach(player ->
-            System.out.println("(" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + ") - " + player.getUser())
+            System.out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
         System.out.println("Press Enter to continue");
         System.in.read();
+    }
+
+    public void deletePlayer() {
+        int[] index = new int[]{1};
+        System.out.println("Select player you want to remove");
+        this.players.forEach(player ->
+                System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
+        );
+        try {
+            int opt = Integer.parseInt(this.reader.readLine());
+            this.players.remove(opt-1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            serializePlayers();
+        }
     }
 
     /**

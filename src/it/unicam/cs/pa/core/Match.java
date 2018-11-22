@@ -14,6 +14,7 @@ public class Match {
     private Player[] players;
     private MatchStatus status = MatchStatus.PLAYING;
     private BufferedReader reader;
+    private final String RESET = "\u001B[0m";
 
     public Match(Settings settings) {
         this.board = new BattleGround();
@@ -21,6 +22,20 @@ public class Match {
         this.printer = new ConsolePrinter();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
+    }
+
+    public boolean allRight() {
+        if (this.available_players.size() >= 2) {
+            return true;
+        } else {
+            System.out.println("You need at least 2 player, please add a new player");
+            try {
+                System.in.read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }
 
     /**
@@ -60,7 +75,7 @@ public class Match {
     private void printWinner() {
         printer.clean();
         printer.printBoard(board);
-        System.out.println("The winner is: " + this.winner.getUser());
+        System.out.println("The winner is: " + this.winner.getDisc().getColor() + this.winner.getUser() + RESET);
         System.out.println("Press enter to return in menu");
         try {
             System.in.read();
@@ -94,7 +109,8 @@ public class Match {
         int[] index = new int[]{1};
         System.out.println("PLAYER " + n + " select available player:");
         this.available_players.forEach(player ->
-            System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
+            System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
+                    + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())
         );
         System.out.print("OPTION ");
         int opt = Integer.parseInt(this.reader.readLine());
