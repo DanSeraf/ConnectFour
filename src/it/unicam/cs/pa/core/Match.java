@@ -50,7 +50,7 @@ public class Match {
     public void start() {
         selectPlayers();
         int id = 0;
-        //TODO Select board size
+        printer.printBoardDelay(board);
         do {
             printer.clean();
             printer.printBoard(board);

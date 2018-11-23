@@ -1,5 +1,7 @@
 package it.unicam.cs.pa.core;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * it prints the board is after a player's move
  * and clean the screen before to print the board
@@ -45,6 +47,34 @@ public class ConsolePrinter {
         }
         printDel(board.getySize());
     }
+
+    public void printBoardDelay(BattleGround board) {
+        Cell[][] bg = board.getBoard();
+        for (int i = 0; i < board.getySize(); i++) {
+            System.out.print("  " + i + " ");
+        }
+        System.out.println();
+        try {
+            for (int x = 0; x < board.getxSize(); x++) {
+                TimeUnit.MILLISECONDS.sleep(80);
+                printDel(board.getySize());
+                for (int y = 0; y < board.getySize(); y++) {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                    if (bg[x][y].isFilled() == true) {
+                        System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
+                    } else {
+                        System.out.print("|   ");
+                    }
+                }
+                System.out.print("|");
+                System.out.println();
+            }
+            printDel(board.getySize());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void printDel(int n) {
         for (int i = 0; i < n; i++) {
