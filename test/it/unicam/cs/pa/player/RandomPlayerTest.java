@@ -10,7 +10,7 @@ public class RandomPlayerTest {
 
     @Test
     @DisplayName("Random player creation")
-    public void createRandomPlayer() {
+    void createRandomPlayer() {
         char symbol = '@';
         DiscColors disc_color = DiscColors.CYAN;
         String playername = "Randino";
@@ -23,7 +23,7 @@ public class RandomPlayerTest {
 
     @Test
     @DisplayName("Get move")
-    public void getMove() {
+    void getMove() {
         RandomPlayer rp1 = new RandomPlayer('@', "Random", DiscColors.GREEN);
         assertNotNull(rp1);
         assertTrue(0 <= rp1.getMove() && rp1.getMove() <= 6);

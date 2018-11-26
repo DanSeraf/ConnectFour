@@ -10,7 +10,7 @@ class HumanPlayerTest {
 
     @Test
     @DisplayName("Human Player creation")
-    public void createPlayer() {
+    void createPlayer() {
         char symbol = '#';
         DiscColors disc_color = DiscColors.BLUE;
         String playername = "Pluto";
