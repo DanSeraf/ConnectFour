@@ -6,10 +6,10 @@ import it.unicam.cs.pa.core.DiscColors;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 
-public class HumanPlayer implements Player, Serializable {
+public class HumanPlayer extends AbstractPlayer implements Player {
 
+    private static final long serialVersionUID = 6446382602942139248L;
     private String username;
     private Disc disc;
 

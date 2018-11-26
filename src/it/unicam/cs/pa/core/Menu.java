@@ -29,7 +29,7 @@ public class Menu {
                 switch(option) {
                     case 1: cprinter.clean();
                         Match match = new Match(this.settings);
-                        if (match.allRight() == true) {
+                        if (match.ready() == true) {
                             match.start();
                         }
                         continue;

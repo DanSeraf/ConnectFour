@@ -2,5 +2,6 @@ package it.unicam.cs.pa.core;
 
 import java.io.Serializable;
 
-public abstract class AbstractDisc implements Serializable {
+abstract class AbstractDisc implements Serializable {
+    private static final long serialVersionUID = 5180726400657075678L;
 }

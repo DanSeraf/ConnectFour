@@ -4,6 +4,7 @@ import it.unicam.cs.pa.player.Player;
 import it.unicam.cs.pa.player.RandomPlayer;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class BattleGround {
     public static final int X_SIZE = 6;
@@ -12,11 +13,13 @@ public class BattleGround {
     private int x_size;
     private int y_size;
     private boolean winner = false;
+    private ConsolePrinter printer;
 
     public BattleGround(int x, int y) {
         this.x_size = x;
         this.y_size = y;
         this.board = new Cell[x][y];
+        this.printer = new ConsolePrinter();
         fill();
     }
 
@@ -36,11 +39,9 @@ public class BattleGround {
         try {
             for (int x = this.x_size-1; x >= 0; x--) {
                 if (this.board[x][move].isFilled() == false) {
+                    printer.printFallingDisc(this.board, this.x_size, this.y_size, player, x, move);
                     this.board[x][move].setDisc(player.getDisc());
                     checkWinner(x, move, player.getDisc().getSymbol());
-                    if (player instanceof RandomPlayer) {
-                        ((RandomPlayer) player).updateBoard(this.board);
-                    }
                     return true;
                 }
             }

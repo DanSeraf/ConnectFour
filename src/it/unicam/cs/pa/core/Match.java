@@ -26,7 +26,7 @@ public class Match {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public boolean allRight() {
+    public boolean ready() {
         if (this.available_players.size() >= 2) {
             return true;
         } else {
@@ -63,6 +63,8 @@ public class Match {
                 } else { id = getOtherPlayer(id); }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (NumberFormatException ne) {
+                continue;
             } finally {
                 if (this.board.isThereAWinner() == true && !board.isFull()) {
                     this.winner = players[getOtherPlayer(id)];
