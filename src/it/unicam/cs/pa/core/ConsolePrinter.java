@@ -2,7 +2,6 @@ package it.unicam.cs.pa.core;
 
 import it.unicam.cs.pa.player.Player;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,7 +15,7 @@ public class ConsolePrinter {
     private String row_del = "o---";
     private String row_end = "o\n";
 
-    public ConsolePrinter() {};
+    public ConsolePrinter() {}
 
     /**
      * clean the screen and go up to the console
@@ -37,7 +36,7 @@ public class ConsolePrinter {
         }
         System.out.println();
         for ( int x = 0; x < board.getxSize(); x++){
-            printDel(board.getySize());
+            printDelimiter(board.getySize());
             for ( int y=0; y < board.getySize(); y++){
                 if (bg[x][y].isFilled() == true) {
                     System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
@@ -48,7 +47,7 @@ public class ConsolePrinter {
             System.out.print("|");
             System.out.println();
         }
-        printDel(board.getySize());
+        printDelimiter(board.getySize());
         System.out.println();
     }
 
@@ -70,7 +69,7 @@ public class ConsolePrinter {
         }
         System.out.println();
         for ( int x = 0; x < x_size; x++) {
-            printDel(y_size);
+            printDelimiter(y_size);
             for ( int y=0; y < y_size; y++) {
                 if (board[x][y].isFilled() == true) {
                     System.out.print("| " + board[x][y].getDisc().getColor() + board[x][y].getDisc().getSymbol() + RESET + " ");
@@ -83,7 +82,7 @@ public class ConsolePrinter {
             System.out.print("|");
             System.out.println();
         }
-        printDel(y_size);
+        printDelimiter(y_size);
         System.out.println();
 
     }
@@ -97,7 +96,7 @@ public class ConsolePrinter {
         try {
             for (int x = 0; x < board.getxSize(); x++) {
                 TimeUnit.MILLISECONDS.sleep(80);
-                printDel(board.getySize());
+                printDelimiter(board.getySize());
                 for (int y = 0; y < board.getySize(); y++) {
                     TimeUnit.MILLISECONDS.sleep(50);
                     if (bg[x][y].isFilled() == true) {
@@ -109,14 +108,14 @@ public class ConsolePrinter {
                 System.out.print("|");
                 System.out.println();
             }
-            printDel(board.getySize());
+            printDelimiter(board.getySize());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void printDel(int n) {
-        for (int i = 0; i < n; i++) {
+    private void printDelimiter(int size) {
+        for (int i = 0; i < size; i++) {
             System.out.print(row_del);
         }
         System.out.print(row_end);

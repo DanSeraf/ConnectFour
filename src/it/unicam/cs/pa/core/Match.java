@@ -16,6 +16,7 @@ public class Match {
     private Player[] players;
     private MatchStatus status = MatchStatus.PLAYING;
     private BufferedReader reader;
+    private Utils util;
     private final String RESET = "\u001B[0m";
 
     public Match(Settings settings) {
@@ -24,6 +25,7 @@ public class Match {
         this.printer = new ConsolePrinter();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
+        this.util = new Utils();
     }
 
     public boolean ready() {
@@ -57,13 +59,15 @@ public class Match {
             try {
                 System.out.print(">" + this.players[id].getUser() + " move: ");
                 int move = players[id].getMove();
-                // check for a valid move
                 if (board.addDisc(players[id], move) == false) {
                     continue;
                 } else { id = getOtherPlayer(id); }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException ne) {
+                continue;
+            } catch (ArrayIndexOutOfBoundsException a) {
+                util.outError("Invalid position, press Enter to retry");
                 continue;
             } finally {
                 if (this.board.isThereAWinner() == true && !board.isFull()) {

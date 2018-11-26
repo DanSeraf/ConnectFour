@@ -5,27 +5,27 @@ import it.unicam.cs.pa.player.RandomPlayer;
 import it.unicam.cs.pa.player.Player;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.function.BiPredicate;
 
 /**
  *
  * Settings
  * it stores the players characters and the boards size
- * TODO (feature) add new boards
- * TODO remove character
  *
  */
 
 public class Settings {
 
-    // list of players that can be used
     private ArrayList<Player> players;
-    // Check if new player has the same symbol of another player
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private BufferedReader reader;
+    private PrintStream out;
+    private Utils util;
 
-    public Settings() {
+    public Settings(InputStream in, PrintStream out) {
+        this.reader = new BufferedReader(new InputStreamReader(in));
+        this.out = out;
+        this.util = new Utils();
         restorePlayers();
     }
 
@@ -33,46 +33,56 @@ public class Settings {
      * add new player to the game
      * ask for name and symbol
      */
-    public void addNewPlayer() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose one username");
-        String username = scanner.nextLine();
-        DiscColors color = getDiscColor(scanner);
-        System.out.println("Choose one character");
-        char symbol = scanner.next().charAt(0);
-        if (checkSym(symbol) == false && (!username.isEmpty() || symbol != ' ')) {
-            createPlayer(symbol, username, color);
-        }
+    public void addNewPlayer() throws IOException {
+        String username = getUsername();
+        DiscColors color = getDiscColor();
+        char symbol = getSymbol();
+        createPlayer(symbol, username, color);
     }
 
-    private DiscColors getDiscColor(Scanner scanner) {
+    private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
+        char symbol;
+        do {
+            out.println("Choose one symbol");
+            symbol = reader.readLine().charAt(0);
+            if (checkSym((char) symbol) == false) {
+                break;
+            } else {
+                util.outError("Another player has the same symbol, choose another one");
+            }
+        } while (true);
+        return symbol;
+    }
+
+    private String getUsername() throws IOException {
+        out.println("Choose one username");
+        String username = reader.readLine();
+        return username;
+    }
+
+    private DiscColors getDiscColor() throws IOException, NumberFormatException {
         while (true) {
-            System.out.println("Select the color you want to use.");
-            System.out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
-            int opt = scanner.nextInt();
-            try {
-                switch (opt) {
-                    case 1:
-                        return DiscColors.RED;
-                    case 2:
-                        return DiscColors.GREEN;
-                    case 3:
-                        return DiscColors.YELLOW;
-                    case 4:
-                        return DiscColors.BLUE;
-                    case 5:
-                        return DiscColors.PURPLE;
-                    case 6:
-                        return DiscColors.CYAN;
-                    case 7:
-                        return DiscColors.WHITE;
-                    default:
-                        System.out.println("Invalid option");
-                        System.out.println("Press enter to continue");
-                        System.in.read();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            out.println("Select the color you want to use.");
+            out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
+            int opt = Integer.parseInt(reader.readLine());
+            switch (opt) {
+                case 1:
+                    return DiscColors.RED;
+                case 2:
+                    return DiscColors.GREEN;
+                case 3:
+                    return DiscColors.YELLOW;
+                case 4:
+                    return DiscColors.BLUE;
+                case 5:
+                    return DiscColors.PURPLE;
+                case 6:
+                    return DiscColors.CYAN;
+                case 7:
+                    return DiscColors.WHITE;
+                default:
+                    out.println("Invalid option");
+                    util.outError("Press Enter to continue");
             }
         }
     }
@@ -85,14 +95,8 @@ public class Settings {
     private boolean checkSym(char symbol) {
         for (Player player : this.players) {
             if (this.sym_check.test(player, symbol)) {
-                System.out.println("Another player has the same symbol");
-                System.out.println("Press Enter to exit");
-                try {
-                    System.in.read();
-                    return true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                out.println("Another player has the same symbol");
+                util.outError("Press Enter to exit");
             }
         }
         return false;
@@ -103,30 +107,23 @@ public class Settings {
      * @param symbol symbol that identify the player
      * @param username username of the player
      */
-    private void createPlayer(char symbol, String username, DiscColors color) {
-        System.out.println("Select type of new player");
-        System.out.println("[1] Human Player");
-        System.out.println("[2] Random Player");
-        try {
-            int option = Integer.parseInt(this.reader.readLine());
-            switch(option) {
-                case 1:
-                    this.players.add(new HumanPlayer(symbol, username, color));
-                    break;
-                case 2:
-                    this.players.add(new RandomPlayer(symbol, username, color));
-                    break;
-                default: System.out.println("Invalid option");
-                    System.out.println("Press enter to continue");
-                    System.in.read();
-            }
-        } catch(NumberFormatException ex) {
-            System.out.println("Not a number");
-        } catch(IOException e) {
-            e.printStackTrace();
-        } finally {
-            serializePlayers();
+    private void createPlayer(char symbol, String username, DiscColors color) throws IOException, NumberFormatException {
+        out.println("Select type of new player");
+        out.println("[1] Human Player");
+        out.println("[2] Random Player");
+        int option = Integer.parseInt(reader.readLine());
+        switch(option) {
+            case 1:
+                players.add(new HumanPlayer(symbol, username, color));
+                break;
+            case 2:
+                players.add(new RandomPlayer(symbol, username, color));
+                break;
+            default: out.println("Invalid option");
+                util.outError("Press Enter to exit");
         }
+        serializePlayers();
+
     }
 
     /**
@@ -137,7 +134,7 @@ public class Settings {
         if(f.exists() && !f.isDirectory()) {
             deserializePlayers();
         } else {
-            this.players = new ArrayList<>();
+            players = new ArrayList<>();
         }
     }
 
@@ -146,19 +143,19 @@ public class Settings {
      */
     public void viewPlayers() throws IOException {
         final String RESET = "\u001B[0m";
-        System.out.println("Players:");
+        out.println("Players:");
         this.players.forEach(player ->
-            System.out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
+            out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
-        System.out.println("Press Enter to continue");
+        out.println("Press Enter to continue");
         System.in.read();
     }
 
     public void deletePlayer() {
         int[] index = new int[]{1};
-        System.out.println("Select player you want to remove");
+        out.println("Select player you want to remove");
         this.players.forEach(player ->
-                System.out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
+                out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
         );
         try {
             int opt = Integer.parseInt(this.reader.readLine());

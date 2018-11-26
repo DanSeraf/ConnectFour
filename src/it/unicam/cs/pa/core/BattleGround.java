@@ -35,20 +35,14 @@ public class BattleGround {
         }
     }
 
-    public boolean addDisc(Player player, int move) throws IOException {
-        try {
-            for (int x = this.x_size-1; x >= 0; x--) {
-                if (this.board[x][move].isFilled() == false) {
-                    printer.printFallingDisc(this.board, this.x_size, this.y_size, player, x, move);
-                    this.board[x][move].setDisc(player.getDisc());
-                    checkWinner(x, move, player.getDisc().getSymbol());
-                    return true;
-                }
+    public boolean addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
+        for (int x = this.x_size-1; x >= 0; x--) {
+            if (this.board[x][move].isFilled() == false) {
+                printer.printFallingDisc(this.board, this.x_size, this.y_size, player, x, move);
+                this.board[x][move].setDisc(player.getDisc());
+                checkWinner(x, move, player.getDisc().getSymbol());
+                return true;
             }
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            System.err.println("Invalid position, press enter to retry.");
-            System.in.read();
-            return false;
         }
         return false;
     }
@@ -148,7 +142,6 @@ public class BattleGround {
     }
     /**
      * check if board is completely filled
-     * in that case, exit the game
      * @return true if board is full
      */
     public boolean isFull() {

@@ -3,15 +3,20 @@ package it.unicam.cs.pa.core;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 public class Menu {
 
     Settings settings;
     ConsolePrinter cprinter;
+    PrintStream out;
+    Utils util;
 
     public Menu() {
-        this.settings = new Settings();
+        this.settings = new Settings(System.in, System.out);
         this.cprinter = new ConsolePrinter();
+        this.out = new PrintStream(System.out);
+        this.util = new Utils();
     }
 
     public void show() {
@@ -24,8 +29,8 @@ public class Menu {
             System.out.println("[5] Exit");
             System.out.print("OPTION ");
             try {
-                BufferedReader buff_reader = new BufferedReader(new InputStreamReader(System.in));
-                int option = Integer.parseInt(buff_reader.readLine());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                int option = Integer.parseInt(reader.readLine());
                 switch(option) {
                     case 1: cprinter.clean();
                         Match match = new Match(this.settings);
@@ -34,7 +39,7 @@ public class Menu {
                         }
                         continue;
                     case 2: cprinter.clean();
-                        this.settings.addNewPlayer();
+                        settings.addNewPlayer();
                         continue;
                     case 3: cprinter.clean();
                         this.settings.deletePlayer();
@@ -45,13 +50,17 @@ public class Menu {
                     case 5: cprinter.clean();
                         System.exit(0);
                     default: System.out.println("Invalid option");
-                        System.out.println("Press enter to continue");
-                        System.in.read();
+                        util.outError("Press enter to continue");
                         continue;
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Not a number");
-            } catch (IOException e) {
+                util.outError("Probably you didn't insert a number");
+                continue;
+            } catch (StringIndexOutOfBoundsException s) {
+                util.outError("Invalid symbol, press Enter");
+                continue;
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         } while(true);
