@@ -141,14 +141,13 @@ public class Settings {
     /**
      * view players
      */
-    public void viewPlayers() throws IOException {
+    public void viewPlayers() {
         final String RESET = "\u001B[0m";
         out.println("Players:");
         this.players.forEach(player ->
             out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
-        out.println("Press Enter to continue");
-        System.in.read();
+        util.outError("Press Enter to continue");
     }
 
     public void deletePlayer() {
