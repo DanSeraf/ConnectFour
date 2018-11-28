@@ -5,7 +5,7 @@ import it.unicam.cs.pa.core.DiscColors;
 
 import java.io.*;
 
-public class HumanPlayer implements Player, Serializable {
+public class HumanPlayer extends AbstractPlayer {
 
     private static final long serialVersionUID = 6446382602942139248L;
     private String username;
