@@ -3,17 +3,14 @@ package it.unicam.cs.pa.player;
 import it.unicam.cs.pa.core.Disc;
 import it.unicam.cs.pa.core.DiscColors;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
-public class HumanPlayer extends AbstractPlayer implements Player {
+public class HumanPlayer implements Player, Serializable {
 
     private static final long serialVersionUID = 6446382602942139248L;
     private String username;
     private Disc disc;
-    private BufferedReader reader;
+    private transient BufferedReader reader;
 
     public HumanPlayer(char symbol, String username, DiscColors color, InputStream in) {
         this.username = username;
