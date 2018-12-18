@@ -5,25 +5,20 @@ import it.unicam.cs.pa.core.DiscColors;
 
 import java.io.*;
 
-public class HumanPlayer extends AbstractPlayer {
+public class HumanPlayer implements Player, Serializable {
 
     private static final long serialVersionUID = 6446382602942139248L;
     private String username;
     private Disc disc;
-    private transient BufferedReader reader;
-
-    public HumanPlayer(char symbol, String username, DiscColors color, InputStream in) {
-        this.username = username;
-        this.disc = new Disc(symbol, color);
-        this.reader = new BufferedReader(new InputStreamReader(in));
-    }
 
     public HumanPlayer(char symbol, String username, DiscColors color) {
-        this(symbol, username, color, System.in);
+        this.username = username;
+        this.disc = new Disc(symbol, color);
     }
 
     @Override
-    public int getMove() throws IOException {
+    public int getMove(InputStream in) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         return Integer.parseInt(reader.readLine());
     }
 

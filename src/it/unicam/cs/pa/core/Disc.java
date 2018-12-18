@@ -1,6 +1,8 @@
 package it.unicam.cs.pa.core;
 
-public class Disc extends AbstractDisc{
+import java.io.Serializable;
+
+public class Disc implements Serializable {
 
     private DiscColors color;
     private char symbol;

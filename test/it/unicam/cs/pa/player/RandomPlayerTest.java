@@ -26,6 +26,6 @@ public class RandomPlayerTest {
     void getMove() {
         RandomPlayer rp1 = new RandomPlayer('@', "Random", DiscColors.GREEN);
         assertNotNull(rp1);
-        assertTrue(0 <= rp1.getMove() && rp1.getMove() <= 6);
+        assertTrue(0 <= rp1.getMove(System.in) && rp1.getMove(System.in) <= 6);
     }
 }

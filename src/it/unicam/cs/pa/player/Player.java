@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 public interface Player {
 
-    int getMove() throws IOException;
+    int getMove(InputStream in) throws IOException;
 
     String getUser();
 

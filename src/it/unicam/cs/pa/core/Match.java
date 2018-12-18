@@ -58,7 +58,7 @@ public class Match {
             printer.printBoard(board);
             try {
                 System.out.print(">" + this.players[id].getUser() + " move: ");
-                int move = players[id].getMove();
+                int move = players[id].getMove(System.in);
                 if (board.addDisc(players[id], move) == false) {
                     continue;
                 } else { id = getOtherPlayer(id); }

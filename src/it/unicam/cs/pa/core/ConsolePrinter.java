@@ -5,8 +5,14 @@ import it.unicam.cs.pa.player.Player;
 import java.util.concurrent.TimeUnit;
 
 /**
- * it prints the board is after a player's move
- * and clean the screen before to print the board
+ *
+ * Simple screen utility to print board and animation
+ *
+ */
+
+/**
+ * TODO BATTLEGROUND IN CONSTRUCTOR
+ *
  */
 
 public class ConsolePrinter {
@@ -26,20 +32,17 @@ public class ConsolePrinter {
     }
 
     /**
-     * print the board in a fashion format
+     * print the board in a cool format
      * @param board Battleground object
      */
     public void printBoard(BattleGround board) {
         Cell[][] bg = board.getBoard();
-        for (int i = 0; i < board.getySize(); i++) {
-            System.out.print("  " + i + " ");
-        }
-        System.out.println();
+        printNumberIndicator(board.getySize());
         for ( int x = 0; x < board.getxSize(); x++){
             printDelimiter(board.getySize());
             for ( int y=0; y < board.getySize(); y++){
                 if (bg[x][y].isFilled() == true) {
-                    System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
+                    System.out.print("|" + bg[x][y].getDisc().getColor() + " " + bg[x][y].getDisc().getSymbol() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -51,30 +54,40 @@ public class ConsolePrinter {
         System.out.println();
     }
 
+    /**
+     * Iterate through the column till the last added disc
+     */
+
     public void printFallingDisc(Cell[][] board, int x_size, int y_size, Player player, int x_move, int y_move) {
         try {
             for (int i = 0; i < x_move; i++) {
                 clean();
                 discAnimation(board, x_size, y_size, player, i, y_move);
-                TimeUnit.MILLISECONDS.sleep(310);
+                TimeUnit.MILLISECONDS.sleep(270);
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
     }
 
+    /**
+     *
+     * @param board
+     * @param x_size
+     * @param y_size
+     * @param player
+     * @param x_move
+     * @param y_move
+     */
     private void discAnimation(Cell[][] board, int x_size, int y_size, Player player, int x_move, int y_move) {
-        for (int i = 0; i < y_size; i++) {
-            System.out.print("  " + i + " ");
-        }
-        System.out.println();
+        printNumberIndicator(y_size);
         for ( int x = 0; x < x_size; x++) {
             printDelimiter(y_size);
             for ( int y=0; y < y_size; y++) {
                 if (board[x][y].isFilled() == true) {
-                    System.out.print("| " + board[x][y].getDisc().getColor() + board[x][y].getDisc().getSymbol() + RESET + " ");
+                    System.out.print("|" + board[x][y].getDisc().getColor()+ " " + board[x][y].getDisc().getSymbol() + " " + RESET);
                 } else if (y == y_move && x == x_move) {
-                    System.out.print("| " + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + " ");
+                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getSymbol() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -89,10 +102,7 @@ public class ConsolePrinter {
 
     public void printBoardDelay(BattleGround board) {
         Cell[][] bg = board.getBoard();
-        for (int i = 0; i < board.getySize(); i++) {
-            System.out.print("  " + i + " ");
-        }
-        System.out.println();
+        printNumberIndicator(board.getySize());
         try {
             for (int x = 0; x < board.getxSize(); x++) {
                 TimeUnit.MILLISECONDS.sleep(80);
@@ -112,6 +122,15 @@ public class ConsolePrinter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void printNumberIndicator(int n) {
+        System.out.println(".___.___.___.___.___.___.___.");
+        System.out.print("| ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(i + " | ");
+        }
+        System.out.println();
     }
 
     private void printDelimiter(int size) {
