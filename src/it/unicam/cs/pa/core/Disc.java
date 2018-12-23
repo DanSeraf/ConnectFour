@@ -2,6 +2,11 @@ package it.unicam.cs.pa.core;
 
 import java.io.Serializable;
 
+/**
+ *
+ * Disc is represented with a color and a symbol
+ *
+ */
 public class Disc implements Serializable {
 
     private DiscColors color;

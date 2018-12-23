@@ -19,7 +19,7 @@ public class BattleGround {
         this.x_size = x;
         this.y_size = y;
         this.board = new Cell[x][y];
-        this.printer = new ConsolePrinter();
+        this.printer = new ConsolePrinter(this);
         fill();
     }
 
@@ -27,6 +27,9 @@ public class BattleGround {
         this( X_SIZE, Y_SIZE );
     }
 
+    /**
+     * Fill the board with empty Cell
+     */
     private void fill() {
         for ( int x = 0; x < this.x_size; x++ ) {
             for (int y = 0; y < this.y_size; y++) {
@@ -35,10 +38,18 @@ public class BattleGround {
         }
     }
 
+    /**
+     * Add disc in the first empty space, starting from the bottom
+     *
+     * @param player player who is playing
+     * @param move x position of move
+     * @return
+     * @throws ArrayIndexOutOfBoundsException
+     */
     public boolean addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
         for (int x = this.x_size-1; x >= 0; x--) {
             if (this.board[x][move].isFilled() == false) {
-                printer.printFallingDisc(this.board, this.x_size, this.y_size, player, x, move);
+                printer.printFallingDisc(this.board, player, x, move);
                 this.board[x][move].setDisc(player.getDisc());
                 checkWinner(x, move, player.getDisc().getSymbol());
                 return true;
@@ -47,6 +58,13 @@ public class BattleGround {
         return false;
     }
 
+    /**
+     * Check for a winner, so check vertical, horizontal and diagonal
+     *
+     * @param x
+     * @param y
+     * @param symbol
+     */
     private void checkWinner(int x, int y, char symbol) {
         if (checkVertical(symbol, y) == true
         || checkHorizontal(symbol, x) == true

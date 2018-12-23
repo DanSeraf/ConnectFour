@@ -28,6 +28,11 @@ public class Match {
         this.util = new Utils();
     }
 
+    /**
+     * Check if there are at least 2 available players
+     *
+     * @return true if available players are equal of more than 2
+     */
     public boolean ready() {
         if (this.available_players.size() >= 2) {
             return true;
@@ -43,11 +48,11 @@ public class Match {
     }
 
     /**
-     * match initialization
+     * Match initialization:
      * selectPlayers is used to let the player choose for a character stored in settings
      * inside the loop, a move is taken from the player and inserted into the board
      * based on the response of the board, the player will change with getOtherPlayer
-     * the game finish when there is winner, it is checked by the Battleground
+     * The game finish when there is winner, it is checked by the Battleground
      */
     public void start() {
         selectPlayers();

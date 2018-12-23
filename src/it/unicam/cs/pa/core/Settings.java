@@ -10,10 +10,10 @@ import java.util.function.BiPredicate;
 /**
  *
  * Settings
- * it stores the players characters and the boards size
+ * It manage the players characters
+ * The settings will be serialized in a file called "Players.sav"
  *
  */
-
 public class Settings {
 
     private ArrayList<Player> players;

@@ -20,8 +20,14 @@ public class ConsolePrinter {
     private static final String RESET = "\u001B[0m";
     private String row_del = "o---";
     private String row_end = "o\n";
+    private BattleGround bg;
 
-    public ConsolePrinter() {}
+    public ConsolePrinter() {
+    }
+
+    public ConsolePrinter(BattleGround bg) {
+        this.bg = bg;
+    }
 
     /**
      * clean the screen and go up to the console
@@ -57,12 +63,11 @@ public class ConsolePrinter {
     /**
      * Iterate through the column till the last added disc
      */
-
-    public void printFallingDisc(Cell[][] board, int x_size, int y_size, Player player, int x_move, int y_move) {
+    public void printFallingDisc(Cell[][] board, Player player, int x_move, int y_move) {
         try {
             for (int i = 0; i < x_move; i++) {
                 clean();
-                discAnimation(board, x_size, y_size, player, i, y_move);
+                discAnimation(board, player, i, y_move);
                 TimeUnit.MILLISECONDS.sleep(270);
             }
         } catch (InterruptedException ie) {
@@ -73,17 +78,15 @@ public class ConsolePrinter {
     /**
      *
      * @param board
-     * @param x_size
-     * @param y_size
      * @param player
      * @param x_move
      * @param y_move
      */
-    private void discAnimation(Cell[][] board, int x_size, int y_size, Player player, int x_move, int y_move) {
-        printNumberIndicator(y_size);
-        for ( int x = 0; x < x_size; x++) {
-            printDelimiter(y_size);
-            for ( int y=0; y < y_size; y++) {
+    private void discAnimation(Cell[][] board, Player player, int x_move, int y_move) {
+        printNumberIndicator(bg.getySize());
+        for ( int x = 0; x < bg.getxSize(); x++) {
+            printDelimiter(bg.getySize());
+            for ( int y=0; y < bg.getySize(); y++) {
                 if (board[x][y].isFilled() == true) {
                     System.out.print("|" + board[x][y].getDisc().getColor()+ " " + board[x][y].getDisc().getSymbol() + " " + RESET);
                 } else if (y == y_move && x == x_move) {
@@ -95,7 +98,7 @@ public class ConsolePrinter {
             System.out.print("|");
             System.out.println();
         }
-        printDelimiter(y_size);
+        printDelimiter(bg.getySize());
         System.out.println();
 
     }

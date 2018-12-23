@@ -16,6 +16,11 @@ public class Utils {
         this(System.in, System.out);
     }
 
+    /**
+     * Print message and ask to press Enter to continue
+     *
+     * @param message
+     */
     public void outError(String message) {
         try {
             out.println(message);
