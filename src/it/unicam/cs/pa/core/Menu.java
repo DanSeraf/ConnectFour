@@ -27,7 +27,7 @@ public class Menu {
             System.out.println("[3] DELETE PLAYER");
             System.out.println("[4] VIEW PLAYERS");
             System.out.println("[5] EXIT");
-            System.out.print("\nOPTION ");
+            util.askInput();
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 int option = Integer.parseInt(reader.readLine());

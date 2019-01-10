@@ -61,7 +61,7 @@ public class Match {
         do {
             printer.printBoard(board);
             try {
-                System.out.print(">" + this.players[id].getUser() + " move: ");
+                System.out.print(this.players[id].getUser() + "> ");
                 int move = players[id].getMove(System.in);
                 if (board.addDisc(players[id], move) == false) {
                     continue;
@@ -121,7 +121,7 @@ public class Match {
                         System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
                                 + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())
                 );
-                System.out.print("OPTION ");
+                util.askInput();
                 int opt = Integer.parseInt(this.reader.readLine());
                 this.players[n - 1] = this.available_players.get(opt - 1);
                 this.available_players.remove(opt - 1);

@@ -29,4 +29,8 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+    public void askInput() {
+        out.print(">> ");
+    }
 }

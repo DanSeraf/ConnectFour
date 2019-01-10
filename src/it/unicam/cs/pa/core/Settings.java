@@ -21,12 +21,14 @@ public class Settings {
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
     private BufferedReader reader;
     private PrintStream out;
+    private Console printer;
     private Utils util;
 
     public Settings(InputStream in, PrintStream out) {
         this.reader = new BufferedReader(new InputStreamReader(in));
         this.out = out;
         this.util = new Utils();
+        this.printer = new Console();
         restorePlayers();
     }
 
@@ -44,7 +46,8 @@ public class Settings {
     private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
         char symbol;
         do {
-            out.println("Choose one symbol");
+            printer.clean();out.println("-CHOOSE ONE SYMBOL-");
+            util.askInput();
             symbol = reader.readLine().charAt(0);
             if (checkSym(symbol) == false) {
                 break;
@@ -57,32 +60,41 @@ public class Settings {
 
     private String getUsername() throws IOException {
         out.println("Choose one username");
+        util.askInput();
         String username = reader.readLine();
         return username;
     }
 
-    private DiscColors getDiscColor() throws IOException, NumberFormatException {
+    private DiscColors getDiscColor() throws IOException {
         while (true) {
-            out.println("Select the color you want to use.");
+            printer.clean();
+            out.println("-CHOOSE A COLOR-");
             out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
-            int opt = Integer.parseInt(reader.readLine());
-            switch (opt) {
-                case 1:
-                    return DiscColors.RED;
-                case 2:
-                    return DiscColors.GREEN;
-                case 3:
-                    return DiscColors.YELLOW;
-                case 4:
-                    return DiscColors.BLUE;
-                case 5:
-                    return DiscColors.PURPLE;
-                case 6:
-                    return DiscColors.CYAN;
-                case 7:
-                    return DiscColors.WHITE;
-                default:
-                    util.outError("Invalid option, press Enter to continue");
+            util.askInput();
+            try {
+                int opt = Integer.parseInt(reader.readLine());
+                switch (opt) {
+                    case 1:
+                        return DiscColors.RED;
+                    case 2:
+                        return DiscColors.GREEN;
+                    case 3:
+                        return DiscColors.YELLOW;
+                    case 4:
+                        return DiscColors.BLUE;
+                    case 5:
+                        return DiscColors.PURPLE;
+                    case 6:
+                        return DiscColors.CYAN;
+                    case 7:
+                        return DiscColors.WHITE;
+                    default:
+                        util.outError("Invalid option, press Enter to continue");
+                        continue;
+                }
+            } catch (NumberFormatException ne) {
+                util.outError("Not a valid option, press Enter to continue");
+                continue;
             }
         }
     }
@@ -106,22 +118,34 @@ public class Settings {
      * @param symbol symbol that identify the player
      * @param username username of the player
      */
-    private void createPlayer(char symbol, String username, DiscColors color) throws IOException, NumberFormatException {
-        out.println("Select type of new player");
-        out.println("[1] Human Player");
-        out.println("[2] Random Player");
-        int option = Integer.parseInt(reader.readLine());
-        switch(option) {
-            case 1:
-                players.add(new HumanPlayer(symbol, username, color));
+    private void createPlayer(char symbol, String username, DiscColors color) throws IOException {
+        while(true) {
+            printer.clean();
+            out.println("-PLAYER TYPE-");
+            out.println("[1] Human Player");
+            out.println("[2] Random Player");
+            util.askInput();
+            try {
+                int option = Integer.parseInt(reader.readLine());
+                switch (option) {
+                    case 1:
+                        players.add(new HumanPlayer(symbol, username, color));
+                        break;
+                    case 2:
+                        players.add(new RandomPlayer(symbol, username, color));
+                        break;
+                    default:
+                        util.outError("Invalid option, Press Enter to continue");
+                        continue;
+                }
+            } catch (NumberFormatException ne) {
+                util.outError("Not a valid option, press Enter to continue");
+                continue;
+            } finally {
+                serializePlayers();
                 break;
-            case 2:
-                players.add(new RandomPlayer(symbol, username, color));
-                break;
-            default: util.outError("Invalid option, Press Enter to exit");
+            }
         }
-        serializePlayers();
-
     }
 
     /**
