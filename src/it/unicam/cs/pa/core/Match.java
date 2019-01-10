@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Match {
 
     private BattleGround board;
-    private ConsolePrinter printer;
+    private Console printer;
     private Player winner;
     private ArrayList<Player> available_players;
     private Player[] players;
@@ -22,7 +22,7 @@ public class Match {
     public Match(Settings settings) {
         this.board = new BattleGround();
         this.available_players = settings.getPlayers();
-        this.printer = new ConsolePrinter();
+        this.printer = new Console();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.util = new Utils();
@@ -59,7 +59,6 @@ public class Match {
         int id = 0;
         printer.printBoardDelay(board);
         do {
-            printer.clean();
             printer.printBoard(board);
             try {
                 System.out.print(">" + this.players[id].getUser() + " move: ");
@@ -86,15 +85,9 @@ public class Match {
     }
 
     private void printWinner() {
-        printer.clean();
         printer.printBoard(board);
         System.out.println("The winner is: " + this.winner.getDisc().getColor() + this.winner.getUser() + RESET);
-        System.out.println("Press enter to return in menu");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        util.outError("Press enter to return in menu");
     }
 
     /**

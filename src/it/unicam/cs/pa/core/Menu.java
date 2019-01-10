@@ -8,13 +8,13 @@ import java.io.PrintStream;
 public class Menu {
 
     Settings settings;
-    ConsolePrinter cprinter;
+    Console cprinter;
     PrintStream out;
     Utils util;
 
     public Menu() {
         this.settings = new Settings(System.in, System.out);
-        this.cprinter = new ConsolePrinter();
+        this.cprinter = new Console();
         this.out = new PrintStream(System.out);
         this.util = new Utils();
     }
@@ -22,12 +22,12 @@ public class Menu {
     public void show() {
         do {
             cprinter.clean();
-            System.out.println("[1] Play");
-            System.out.println("[2] Add Player");
-            System.out.println("[3] Remove Player");
-            System.out.println("[4] View Players");
-            System.out.println("[5] Exit");
-            System.out.print("OPTION ");
+            System.out.println("[1] PLAY");
+            System.out.println("[2] ADD NEW PLAYER");
+            System.out.println("[3] DELETE PLAYER");
+            System.out.println("[4] VIEW PLAYERS");
+            System.out.println("[5] EXIT");
+            System.out.print("\nOPTION ");
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 int option = Integer.parseInt(reader.readLine());

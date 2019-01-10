@@ -16,6 +16,7 @@ import java.util.function.BiPredicate;
  */
 public class Settings {
 
+    final String RESET = "\u001B[0m";
     private ArrayList<Player> players;
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
     private BufferedReader reader;
@@ -117,8 +118,7 @@ public class Settings {
             case 2:
                 players.add(new RandomPlayer(symbol, username, color));
                 break;
-            default: out.println("Invalid option");
-                util.outError("Press Enter to exit");
+            default: util.outError("Invalid option, Press Enter to exit");
         }
         serializePlayers();
 
@@ -140,8 +140,8 @@ public class Settings {
      * view players
      */
     public void viewPlayers() {
-        final String RESET = "\u001B[0m";
-        out.println("Players:");
+        out.println("PLAYERS");
+
         this.players.forEach(player ->
             out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
@@ -151,10 +151,10 @@ public class Settings {
 
     public void deletePlayer() throws IOException{
         int[] index = new int[]{1};
-        out.println("Select player you want to remove");
+        out.println("DELETE PLAYERS");
 
         this.players.forEach(player ->
-                out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
+                out.println("[" + index[0]++ + "] ["+ player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]" + player.getUser())
         );
 
         int opt = Integer.parseInt(this.reader.readLine());

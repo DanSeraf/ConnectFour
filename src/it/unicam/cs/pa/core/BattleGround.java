@@ -1,10 +1,6 @@
 package it.unicam.cs.pa.core;
 
 import it.unicam.cs.pa.player.Player;
-import it.unicam.cs.pa.player.RandomPlayer;
-
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class BattleGround {
     public static final int X_SIZE = 6;
@@ -13,13 +9,13 @@ public class BattleGround {
     private int x_size;
     private int y_size;
     private boolean winner = false;
-    private ConsolePrinter printer;
+    private Console printer;
 
     public BattleGround(int x, int y) {
         this.x_size = x;
         this.y_size = y;
         this.board = new Cell[x][y];
-        this.printer = new ConsolePrinter(this);
+        this.printer = new Console(this);
         fill();
     }
 

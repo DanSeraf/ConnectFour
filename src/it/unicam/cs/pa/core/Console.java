@@ -9,23 +9,17 @@ import java.util.concurrent.TimeUnit;
  * Simple screen utility to print board and animation
  *
  */
-
-/**
- * TODO BATTLEGROUND IN CONSTRUCTOR
- *
- */
-
-public class ConsolePrinter {
+public class Console {
 
     private static final String RESET = "\u001B[0m";
     private String row_del = "o---";
     private String row_end = "o\n";
     private BattleGround bg;
 
-    public ConsolePrinter() {
+    public Console() {
     }
 
-    public ConsolePrinter(BattleGround bg) {
+    public Console(BattleGround bg) {
         this.bg = bg;
     }
 
@@ -42,6 +36,7 @@ public class ConsolePrinter {
      * @param board Battleground object
      */
     public void printBoard(BattleGround board) {
+        clean();
         Cell[][] bg = board.getBoard();
         printNumberIndicator(board.getySize());
         for ( int x = 0; x < board.getxSize(); x++){
@@ -104,6 +99,7 @@ public class ConsolePrinter {
     }
 
     public void printBoardDelay(BattleGround board) {
+        clean();
         Cell[][] bg = board.getBoard();
         printNumberIndicator(board.getySize());
         try {
