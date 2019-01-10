@@ -54,13 +54,12 @@ public class Menu {
                         continue;
                 }
             } catch (NumberFormatException ex) {
-                util.outError("Probably you didn't insert a number");
+                util.outError("Not an option, press Enter to continue");
                 continue;
             } catch (StringIndexOutOfBoundsException s) {
-                util.outError("Invalid symbol, press Enter");
+                util.outError("Invalid symbol, press Enter to continue");
                 continue;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } while(true);

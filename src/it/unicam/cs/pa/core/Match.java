@@ -119,16 +119,24 @@ public class Match {
      * @param n number of the player
      */
     private void selectPlayer(int n) throws IOException {
-        int[] index = new int[]{1};
-        System.out.println("PLAYER " + n + " select available player:");
-        this.available_players.forEach(player ->
-            System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
-                    + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())
-        );
-        System.out.print("OPTION ");
-        int opt = Integer.parseInt(this.reader.readLine());
-        this.players[n-1] = this.available_players.get(opt - 1);
-        this.available_players.remove(opt - 1);
-        printer.clean();
+        while(true) {
+            try {
+                printer.clean();
+                int[] index = new int[]{1};
+                System.out.println("PLAYER " + n + " select available player:");
+                this.available_players.forEach(player ->
+                        System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
+                                + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())
+                );
+                System.out.print("OPTION ");
+                int opt = Integer.parseInt(this.reader.readLine());
+                this.players[n - 1] = this.available_players.get(opt - 1);
+                this.available_players.remove(opt - 1);
+                break;
+            } catch (IndexOutOfBoundsException e) {
+                util.outError("Not an option, press Enter to continue");
+                continue;
+            }
+        }
     }
 }

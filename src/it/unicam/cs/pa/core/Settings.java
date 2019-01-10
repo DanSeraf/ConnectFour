@@ -31,7 +31,7 @@ public class Settings {
 
     /**
      * add new player to the game
-     * ask for name and symbol
+     * ask for name and disc (symbol, color)
      */
     public void addNewPlayer() throws IOException {
         String username = getUsername();
@@ -45,7 +45,7 @@ public class Settings {
         do {
             out.println("Choose one symbol");
             symbol = reader.readLine().charAt(0);
-            if (checkSym((char) symbol) == false) {
+            if (checkSym(symbol) == false) {
                 break;
             } else {
                 util.outError("Another player has the same symbol, choose another one");
@@ -81,8 +81,7 @@ public class Settings {
                 case 7:
                     return DiscColors.WHITE;
                 default:
-                    out.println("Invalid option");
-                    util.outError("Press Enter to continue");
+                    util.outError("Invalid option, press Enter to continue");
             }
         }
     }
@@ -95,8 +94,7 @@ public class Settings {
     private boolean checkSym(char symbol) {
         for (Player player : this.players) {
             if (this.sym_check.test(player, symbol)) {
-                out.println("Another player has the same symbol");
-                util.outError("Press Enter to exit");
+                return true;
             }
         }
         return false;
@@ -147,23 +145,21 @@ public class Settings {
         this.players.forEach(player ->
             out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
+
         util.outError("Press Enter to continue");
     }
 
-    public void deletePlayer() {
+    public void deletePlayer() throws IOException{
         int[] index = new int[]{1};
         out.println("Select player you want to remove");
+
         this.players.forEach(player ->
                 out.println("[" + index[0]++ + "] " + player.getUser() + " - (" + player.getDisc().getSymbol() + ")")
         );
-        try {
-            int opt = Integer.parseInt(this.reader.readLine());
-            this.players.remove(opt-1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            serializePlayers();
-        }
+
+        int opt = Integer.parseInt(this.reader.readLine());
+        this.players.remove(opt-1);
+        serializePlayers();
     }
 
     /**
