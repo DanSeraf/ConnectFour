@@ -78,10 +78,10 @@ public class Match {
                     this.winner = players[getOtherPlayer(id)];
                     printer.printBoard(board);
                     status = MatchStatus.END;
+                    printWinner();
                 }
             }
         } while(status == MatchStatus.PLAYING);
-        printWinner();
     }
 
     private void printWinner() {
@@ -116,7 +116,7 @@ public class Match {
             try {
                 printer.clean();
                 int[] index = new int[]{1};
-                System.out.println("PLAYER " + n + " select available player:");
+                System.out.println("PLAYER " + n + "\n");
                 this.available_players.forEach(player ->
                         System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
                                 + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())

@@ -16,8 +16,7 @@ public class Console {
     private String row_end = "o\n";
     private BattleGround bg;
 
-    public Console() {
-    }
+    public Console() {}
 
     public Console(BattleGround bg) {
         this.bg = bg;
@@ -70,13 +69,6 @@ public class Console {
         }
     }
 
-    /**
-     *
-     * @param board
-     * @param player
-     * @param x_move
-     * @param y_move
-     */
     private void discAnimation(Cell[][] board, Player player, int x_move, int y_move) {
         printNumberIndicator(bg.getySize());
         for ( int x = 0; x < bg.getxSize(); x++) {

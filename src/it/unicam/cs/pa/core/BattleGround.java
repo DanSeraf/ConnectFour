@@ -35,7 +35,7 @@ public class BattleGround {
     }
 
     /**
-     * Add disc in the first empty space, starting from the bottom
+     * Add disc in the first empty space
      *
      * @param player player who is playing
      * @param move x position of move

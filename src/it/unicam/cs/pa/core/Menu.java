@@ -32,8 +32,7 @@ public class Menu {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 int option = Integer.parseInt(reader.readLine());
                 switch(option) {
-                    case 1: cprinter.clean();
-                        Match match = new Match(this.settings);
+                    case 1: Match match = new Match(this.settings);
                         if (match.ready() == true) {
                             match.start();
                         }
@@ -55,9 +54,6 @@ public class Menu {
                 }
             } catch (NumberFormatException ex) {
                 util.outError("Not an option, press Enter to continue");
-                continue;
-            } catch (StringIndexOutOfBoundsException s) {
-                util.outError("Invalid symbol, press Enter to continue");
                 continue;
             } catch (IOException e) {
                 e.printStackTrace();

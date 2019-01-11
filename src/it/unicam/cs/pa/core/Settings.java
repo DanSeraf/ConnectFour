@@ -46,7 +46,8 @@ public class Settings {
     private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
         char symbol;
         do {
-            printer.clean();out.println("-CHOOSE ONE SYMBOL-");
+            printer.clean();
+            out.println("-CHOOSE ONE SYMBOL-");
             util.askInput();
             symbol = reader.readLine().charAt(0);
             if (checkSym(symbol) == false) {
@@ -54,7 +55,7 @@ public class Settings {
             } else {
                 util.outError("Another player has the same symbol, choose another one");
             }
-        } while (true);
+        } while(true);
         return symbol;
     }
 
@@ -170,6 +171,7 @@ public class Settings {
             out.println("[" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]-" + player.getUser())
         );
 
+        util.askInput();
         util.outError("Press Enter to continue");
     }
 
@@ -181,6 +183,7 @@ public class Settings {
                 out.println("[" + index[0]++ + "] ["+ player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]" + player.getUser())
         );
 
+        util.askInput();
         int opt = Integer.parseInt(this.reader.readLine());
         this.players.remove(opt-1);
         serializePlayers();
