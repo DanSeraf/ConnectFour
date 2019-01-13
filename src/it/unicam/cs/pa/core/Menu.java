@@ -4,24 +4,25 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
     Settings settings;
-    Console cprinter;
+    Console printer;
     PrintStream out;
     Utils util;
 
     public Menu() {
         this.settings = new Settings(System.in, System.out);
-        this.cprinter = new Console();
+        this.printer = new Console();
         this.out = new PrintStream(System.out);
         this.util = new Utils();
     }
 
     public void show() {
         do {
-            cprinter.clean();
+            printer.clean();
             System.out.println("[1] PLAY");
             System.out.println("[2] ADD NEW PLAYER");
             System.out.println("[3] DELETE PLAYER");
@@ -37,16 +38,19 @@ public class Menu {
                             match.start();
                         }
                         continue;
-                    case 2: cprinter.clean();
+                    case 2: printer.clean();
                         settings.addNewPlayer();
                         continue;
-                    case 3: cprinter.clean();
+                    case 3: printer.clean();
                         this.settings.deletePlayer();
                         continue;
-                    case 4: cprinter.clean();
+                    case 4: printer.clean();
                         this.settings.viewPlayers();
                         continue;
-                    case 5: cprinter.clean();
+                    case 5: printer.clean();
+                        System.out.println("GOODBYE!");
+                        TimeUnit.SECONDS.sleep(1);
+                        printer.clean();
                         System.exit(0);
                     default: System.out.println("Invalid option");
                         util.outError("Press enter to continue");
@@ -55,6 +59,8 @@ public class Menu {
             } catch (NumberFormatException ex) {
                 util.outError("Not an option, press Enter to continue");
                 continue;
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -161,9 +161,6 @@ public class Settings {
         }
     }
 
-    /**
-     * view players
-     */
     public void viewPlayers() {
         out.println("PLAYERS");
 

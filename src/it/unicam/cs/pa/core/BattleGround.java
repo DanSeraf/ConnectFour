@@ -39,8 +39,7 @@ public class BattleGround {
      *
      * @param player player who is playing
      * @param move x position of move
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
+     *
      */
     public boolean addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
         for (int x = this.x_size-1; x >= 0; x--) {

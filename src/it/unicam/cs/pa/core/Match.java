@@ -93,7 +93,7 @@ public class Match {
     /**
      * change the player
      */
-    public static int getOtherPlayer(int id) {
+    private static int getOtherPlayer(int id) {
         return (id+1)%2;
     }
 
