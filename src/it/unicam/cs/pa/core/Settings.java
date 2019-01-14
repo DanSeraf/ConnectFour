@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
  *
  * Settings
  * It manage the players characters
- * The settings will be serialized in a file called "Players.sav"
+ * The settings will be serialized in a file called "settings.sav"
  *
  */
 public class Settings {
@@ -149,7 +149,7 @@ public class Settings {
     }
 
     /**
-     * check if Players.sav exists
+     * check if the file "settings.sav" exists
      */
     private void restorePlayers() {
         File f = new File("settings.sav");

@@ -63,9 +63,8 @@ public class Match {
             try {
                 System.out.print(this.players[id].getUser() + "> ");
                 int move = players[id].getMove(System.in);
-                if (board.addDisc(players[id], move) == false) {
-                    continue;
-                } else { id = getOtherPlayer(id); }
+                board.addDisc(players[id], move);
+                id = getOtherPlayer(id);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException ne) {

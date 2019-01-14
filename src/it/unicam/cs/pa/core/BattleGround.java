@@ -41,16 +41,14 @@ public class BattleGround {
      * @param move x position of move
      *
      */
-    public boolean addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
+    public void addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
         for (int x = this.x_size-1; x >= 0; x--) {
             if (this.board[x][move].isFilled() == false) {
                 printer.printFallingDisc(this.board, player, x, move);
                 this.board[x][move].setDisc(player.getDisc());
                 checkWinner(x, move, player.getDisc().getSymbol());
-                return true;
             }
         }
-        return false;
     }
 
     /**
