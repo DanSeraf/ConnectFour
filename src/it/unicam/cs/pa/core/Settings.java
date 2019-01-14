@@ -120,7 +120,8 @@ public class Settings {
      * @param username username of the player
      */
     private void createPlayer(char symbol, String username, DiscColors color) throws IOException {
-        while(true) {
+        boolean should_break = false;
+        while(!should_break) {
             printer.clean();
             out.println("-PLAYER TYPE-");
             out.println("[1] Human Player");
@@ -131,20 +132,19 @@ public class Settings {
                 switch (option) {
                     case 1:
                         players.add(new HumanPlayer(symbol, username, color));
+                        should_break = true;
                         break;
                     case 2:
                         players.add(new RandomPlayer(symbol, username, color));
+                        should_break = true;
                         break;
                     default:
                         util.outError("Invalid option, Press Enter to continue");
-                        continue;
                 }
             } catch (NumberFormatException ne) {
-                util.outError("Not a valid option, press Enter to continue");
-                continue;
+                util.outError("Invalid option, press Enter to continue");
             } finally {
                 serializePlayers();
-                break;
             }
         }
     }
@@ -173,17 +173,20 @@ public class Settings {
     }
 
     public void deletePlayer() throws IOException{
-        int[] index = new int[]{1};
-        out.println("DELETE PLAYERS");
+        do {
+            printer.clean();
+            int[] index = new int[]{1};
+            out.println("DELETE PLAYERS ([0] to Exit)");
+            this.players.forEach(player ->
+                    out.println("[" + index[0]++ + "] [" + player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]" + player.getUser())
+            );
 
-        this.players.forEach(player ->
-                out.println("[" + index[0]++ + "] ["+ player.getDisc().getColor() + player.getDisc().getSymbol() + RESET + "]" + player.getUser())
-        );
-
-        util.askInput();
-        int opt = Integer.parseInt(this.reader.readLine());
-        this.players.remove(opt-1);
-        serializePlayers();
+            util.askInput();
+            int opt = Integer.parseInt(this.reader.readLine());
+            if (opt == 0) { break; }
+            this.players.remove(opt - 1);
+            serializePlayers();
+        } while(true);
     }
 
     /**
@@ -194,7 +197,7 @@ public class Settings {
         FileOutputStream out_file = null;
         ObjectOutputStream obj_file = null;
         try {
-            out_file = new FileOutputStream("Players.sav");
+            out_file = new FileOutputStream("settings.sav");
             obj_file = new ObjectOutputStream(out_file);
             obj_file.writeObject(this.players);
         } catch (IOException e) {
@@ -218,7 +221,7 @@ public class Settings {
         FileInputStream input_file = null;
         ObjectInputStream obj_file = null;
         try {
-            input_file = new FileInputStream("Players.sav");
+            input_file = new FileInputStream("settings.sav");
             obj_file = new ObjectInputStream(input_file);
             this.players = (ArrayList<Player>) obj_file.readObject();
         } catch (ClassNotFoundException ex) {

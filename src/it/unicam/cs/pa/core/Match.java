@@ -116,7 +116,7 @@ public class Match {
             try {
                 printer.clean();
                 int[] index = new int[]{1};
-                System.out.println("PLAYER " + n + "\n");
+                System.out.println("PLAYER " + n);
                 this.available_players.forEach(player ->
                         System.out.println("[" + index[0]++ + "] [" + player.getDisc().getColor()
                                 + player.getDisc().getSymbol() + RESET + "] -> " + player.getUser())
