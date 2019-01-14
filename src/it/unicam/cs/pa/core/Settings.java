@@ -62,8 +62,7 @@ public class Settings {
     private String getUsername() throws IOException {
         out.println("Choose one username");
         util.askInput();
-        String username = reader.readLine();
-        return username;
+        return reader.readLine();
     }
 
     private DiscColors getDiscColor() throws IOException {
@@ -153,7 +152,7 @@ public class Settings {
      * check if Players.sav exists
      */
     private void restorePlayers() {
-        File f = new File("Players.sav");
+        File f = new File("settings.sav");
         if(f.exists() && !f.isDirectory()) {
             deserializePlayers();
         } else {
