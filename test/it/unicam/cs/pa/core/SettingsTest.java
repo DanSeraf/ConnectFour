@@ -21,11 +21,11 @@ class SettingsTest {
     @Test
     @DisplayName("Object Player serialized when a new player is created")
     void serializedPlayer() throws IOException {
-        String inputdata = "Pluto\n1\n@\n2";
+        String inputdata = "Pluto\n1\n#\n2";
         System.setIn(new ByteArrayInputStream(inputdata.getBytes()));
         Settings settings = new Settings(System.in, System.out);
         settings.addNewPlayer();
-        File file = new File("Players.sav");
+        File file = new File("settings.sav");
         assertTrue(file.exists());
     }
 

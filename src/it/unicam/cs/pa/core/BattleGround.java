@@ -6,29 +6,21 @@ public class BattleGround {
     public static final int X_SIZE = 6;
     public static final int Y_SIZE = 7;
     private Cell[][] board;
-    private int x_size;
-    private int y_size;
     private boolean winner = false;
     private Console printer;
 
-    public BattleGround(int x, int y) {
-        this.x_size = x;
-        this.y_size = y;
-        this.board = new Cell[x][y];
+    public BattleGround() {
+        this.board = new Cell[X_SIZE][Y_SIZE];
         this.printer = new Console(this);
         fill();
-    }
-
-    public BattleGround() {
-        this( X_SIZE, Y_SIZE );
     }
 
     /**
      * Fill the board with empty Cell
      */
     private void fill() {
-        for ( int x = 0; x < this.x_size; x++ ) {
-            for (int y = 0; y < this.y_size; y++) {
+        for ( int x = 0; x < X_SIZE; x++ ) {
+            for (int y = 0; y < Y_SIZE; y++) {
                 this.board[x][y] = new Cell();
             }
         }
@@ -42,11 +34,12 @@ public class BattleGround {
      *
      */
     public void addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
-        for (int x = this.x_size-1; x >= 0; x--) {
-            if (this.board[x][move].isFilled() == false) {
+        for (int x = X_SIZE-1; x >= 0; x--) {
+            if (!this.board[x][move].isFilled()) {
                 printer.printFallingDisc(this.board, player, x, move);
                 this.board[x][move].setDisc(player.getDisc());
                 checkWinner(x, move, player.getDisc().getSymbol());
+                break;
             }
         }
     }
@@ -54,21 +47,22 @@ public class BattleGround {
     /**
      * Check for a winner, so check vertical, horizontal and diagonal
      *
-     * @param x
-     * @param y
-     * @param symbol
+     * @param x x move
+     * @param y y move
+     * @param symbol symbol of the player who is playing
+     *
      */
     private void checkWinner(int x, int y, char symbol) {
-        if (checkVertical(symbol, y) == true
-        || checkHorizontal(symbol, x) == true
-        || checkDiagonal(symbol, x, y) == true) {
+        if (checkVertical(symbol, y)
+        || checkHorizontal(symbol, x)
+        || checkDiagonal(symbol, x, y)) {
             this.winner = true;
         }
     }
 
     private boolean checkVertical(char symbol, int y) {
         int count = 0;
-        for (int i = 0; i<this.x_size; i++) {
+        for (int i = 0; i<X_SIZE; i++) {
             if (this.board[i][y].getDisc().getSymbol() == symbol) {
                 count++;
                 if (count == 4) {
@@ -82,7 +76,7 @@ public class BattleGround {
 
     private boolean checkHorizontal(char symbol, int x) {
         int count = 0;
-        for (int i = 0; i<this.y_size; i++) {
+        for (int i = 0; i<Y_SIZE; i++) {
             if (this.board[x][i].getDisc().getSymbol() == symbol) {
                 count++;
                 if (count == 4) {
@@ -94,18 +88,14 @@ public class BattleGround {
     }
 
     private boolean checkDiagonal(char symbol, int x, int y) {
-        if (checkDiagonalRB(symbol, x, y) + checkDiagonalLT(symbol, x, y) >= 3
-            || checkDiagonalRT(symbol, x, y) + checkDiagonalLB(symbol, x, y) >= 3) {
-            return true;
-        } else {
-            return false;
-        }
+        return checkDiagonalRB(symbol, x, y) + checkDiagonalLT(symbol, x, y) >= 3
+                || checkDiagonalRT(symbol, x, y) + checkDiagonalLB(symbol, x, y) >= 3;
     }
 
     private int checkDiagonalRB(char symbol, int x, int y) {
         int count = 0;
         while (true) {
-            if (x == this.x_size-1 || y == this.y_size-1) {
+            if (x == X_SIZE-1 || y == Y_SIZE-1) {
                 break;
             } else if (this.board[++x][++y].getDisc().getSymbol() == symbol) {
                 count++;
@@ -131,7 +121,7 @@ public class BattleGround {
     private int checkDiagonalRT(char symbol, int x, int y) {
         int count = 0;
         while(true) {
-            if (x == 0 || y == this.y_size-1) {
+            if (x == 0 || y == Y_SIZE-1) {
                 break;
             } else if (this.board[--x][++y].getDisc().getSymbol() == symbol) {
                 count++;
@@ -143,7 +133,7 @@ public class BattleGround {
     private int checkDiagonalLB(char symbol, int x, int y) {
         int count = 0;
         while(true) {
-            if (x == this.x_size-1 || y == 0) {
+            if (x == X_SIZE-1 || y == 0) {
                 break;
             } else if (this.board[++x][--y].getDisc().getSymbol() == symbol) {
                 count++;
@@ -156,8 +146,8 @@ public class BattleGround {
      * @return true if board is full
      */
     public boolean isFull() {
-        for (int x = 0; x < this.x_size; x++) {
-            for (int y = 0; y < this.y_size; y++) {
+        for (int x = 0; x < X_SIZE; x++) {
+            for (int y = 0; y < Y_SIZE; y++) {
                 if (!this.board[x][y].isFilled()) {
                     return false;
                 }
@@ -171,11 +161,11 @@ public class BattleGround {
     }
 
     public int getySize() {
-        return this.y_size;
+        return Y_SIZE;
     }
 
     public int getxSize() {
-        return this.x_size;
+        return X_SIZE;
     }
 
     public Cell[][] getBoard() {
