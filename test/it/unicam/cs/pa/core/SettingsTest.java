@@ -21,7 +21,7 @@ class SettingsTest {
     @Test
     @DisplayName("Object Player serialized when a new player is created")
     void serializedPlayer() throws IOException {
-        String inputdata = "Pluto\n1\n#\n2";
+        String inputdata = "Pluto\n1\n#\n1";
         System.setIn(new ByteArrayInputStream(inputdata.getBytes()));
         Settings settings = new Settings(System.in, System.out);
         settings.addNewPlayer();
@@ -32,7 +32,7 @@ class SettingsTest {
     @Test
     @DisplayName("New player correctly created with correct input")
     void addNewPlayer() throws IOException {
-        String inputdata = "Pluto\n1\n@\n2";
+        String inputdata = "Pluto\n1\n@\n1";
         System.setIn(new ByteArrayInputStream(inputdata.getBytes()));
         Settings settings = new Settings(System.in, System.out);
         settings.addNewPlayer();
