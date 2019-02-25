@@ -183,8 +183,12 @@ public class Settings {
             util.askInput();
             int opt = Integer.parseInt(this.reader.readLine());
             if (opt == 0) { break; }
-            this.players.remove(opt - 1);
-            serializePlayers();
+            try {
+                this.players.remove(opt - 1);
+                serializePlayers();
+            } catch (IndexOutOfBoundsException ie) {
+                break;
+            }
         } while(true);
     }
 
