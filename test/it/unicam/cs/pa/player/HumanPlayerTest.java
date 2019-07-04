@@ -15,18 +15,18 @@ class HumanPlayerTest {
     @DisplayName("Human player creation")
     void createHumanPlayer() {
         HumanPlayer p1 = new HumanPlayer('#', "Stallino", DiscColors.BLUE);
+        assertNotNull(p1);
         assertEquals("Stallino", p1.getUser());
         assertEquals('#', p1.getDisc().getSymbol());
         assertEquals(DiscColors.BLUE.toString(), p1.getDisc().getColor());
-        assertNotNull(p1);
     }
 
     @Test
     @DisplayName("Get move")
-    void getMove() throws IOException {
+    void getMove() {
         String data = "3";
         System.setIn(new ByteArrayInputStream(data.getBytes()));
         HumanPlayer testplayer = new HumanPlayer('#', "Pluto", DiscColors.GREEN);
-        assertEquals(3, testplayer.getMove(System.in));
+        assertEquals(3, testplayer.getMove());
     }
 }

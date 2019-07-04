@@ -11,38 +11,36 @@ import java.util.concurrent.TimeUnit;
  */
 public class Console {
 
+    private static final Console console = new Console();
     private static final String RESET = "\u001B[0m";
     private String row_del = "o---";
     private String row_end = "o\n";
-    private BattleGround bg;
+    private BattleGround bg = BattleGround.getInstance();
+    private Utils util;
 
-    public Console() {}
-
-    public Console(BattleGround bg) {
-        this.bg = bg;
+    private Console() {
+        this.util = new Utils();
     }
 
     /**
-     * clean the screen and go up to the console
+     * Simple return the instance of the singleton class
+     * @return instance of Console
      */
-    public void clean() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    public static Console getInstance() {
+        return console;
     }
 
     /**
      * print the board in a cool format
-     * @param board Battleground object
      */
-    public void printBoard(BattleGround board) {
-        clean();
-        Cell[][] bg = board.getBoard();
-        printNumberIndicator(board.getySize());
-        for ( int x = 0; x < board.getxSize(); x++){
-            printDelimiter(board.getySize());
-            for ( int y=0; y < board.getySize(); y++){
-                if (bg[x][y].isFilled() == true) {
-                    System.out.print("|" + bg[x][y].getDisc().getColor() + " " + bg[x][y].getDisc().getSymbol() + " " + RESET);
+    public void printBoard() {
+        util.clean();
+        printNumberIndicator(bg.getySize());
+        for ( int x = 0; x < bg.getxSize(); x++){
+            printDelimiter(bg.getySize());
+            for ( int y=0; y < bg.getySize(); y++){
+                if (bg.getBoard()[x][y].isFilled()) {
+                    System.out.print("|" + bg.getBoard()[x][y].getDisc().getColor() + " " + bg.getBoard()[x][y].getDisc().getSymbol() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -50,18 +48,18 @@ public class Console {
             System.out.print("|");
             System.out.println();
         }
-        printDelimiter(board.getySize());
+        printDelimiter(bg.getySize());
         System.out.println();
     }
 
     /**
      * Iterate through the column till the last added disc
      */
-    public void printFallingDisc(Cell[][] board, Player player, int x_move, int y_move) {
+    public void printFallingDisc(Player player, int x_move, int y_move) {
         try {
             for (int i = 0; i < x_move; i++) {
-                clean();
-                discAnimation(board, player, i, y_move);
+                util.clean();
+                discAnimation(player, i, y_move);
                 TimeUnit.MILLISECONDS.sleep(270);
             }
         } catch (InterruptedException ie) {
@@ -69,13 +67,13 @@ public class Console {
         }
     }
 
-    private void discAnimation(Cell[][] board, Player player, int x_move, int y_move) {
+    private void discAnimation(Player player, int x_move, int y_move) {
         printNumberIndicator(bg.getySize());
         for ( int x = 0; x < bg.getxSize(); x++) {
             printDelimiter(bg.getySize());
             for ( int y=0; y < bg.getySize(); y++) {
-                if (board[x][y].isFilled() == true) {
-                    System.out.print("|" + board[x][y].getDisc().getColor()+ " " + board[x][y].getDisc().getSymbol() + " " + RESET);
+                if (bg.getBoard()[x][y].isFilled() == true) {
+                    System.out.print("|" + bg.getBoard()[x][y].getDisc().getColor()+ " " + bg.getBoard()[x][y].getDisc().getSymbol() + " " + RESET);
                 } else if (y == y_move && x == x_move) {
                     System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getSymbol() + " " + RESET);
                 } else {
@@ -90,18 +88,18 @@ public class Console {
 
     }
 
-    public void printBoardDelay(BattleGround board) {
-        clean();
-        Cell[][] bg = board.getBoard();
-        printNumberIndicator(board.getySize());
+    public void printBoardDelay() {
+        util.clean();
+        Cell[][] board = bg.getBoard();
+        printNumberIndicator(bg.getySize());
         try {
-            for (int x = 0; x < board.getxSize(); x++) {
+            for (int x = 0; x < bg.getxSize(); x++) {
                 TimeUnit.MILLISECONDS.sleep(80);
-                printDelimiter(board.getySize());
-                for (int y = 0; y < board.getySize(); y++) {
+                printDelimiter(bg.getySize());
+                for (int y = 0; y < bg.getySize(); y++) {
                     TimeUnit.MILLISECONDS.sleep(50);
-                    if (bg[x][y].isFilled() == true) {
-                        System.out.print("| " + bg[x][y].getDisc().getColor() + bg[x][y].getDisc().getSymbol() + RESET + " ");
+                    if (board[x][y].isFilled()) {
+                        System.out.print("| " + board[x][y].getDisc().getColor() + board[x][y].getDisc().getSymbol() + RESET + " ");
                     } else {
                         System.out.print("|   ");
                     }
@@ -109,7 +107,7 @@ public class Console {
                 System.out.print("|");
                 System.out.println();
             }
-            printDelimiter(board.getySize());
+            printDelimiter(bg.getySize());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

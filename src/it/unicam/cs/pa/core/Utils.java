@@ -17,17 +17,25 @@ public class Utils {
     }
 
     /**
-     * Print message and ask to press Enter to continue
+     * Wait for the user input
      *
-     * @param message
+     * @param message for the user
      */
-    public void outError(String message) {
+    public void waitInput(String message) {
         try {
             out.println(message);
             in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * clean the screen and go up to the console
+     */
+    public void clean() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public void askInput() {

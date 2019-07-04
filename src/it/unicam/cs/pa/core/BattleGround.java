@@ -1,24 +1,27 @@
 package it.unicam.cs.pa.core;
 
+import it.unicam.cs.pa.exception.FullColumnException;
 import it.unicam.cs.pa.player.Player;
 
 public class BattleGround {
-    public static final int X_SIZE = 6;
-    public static final int Y_SIZE = 7;
+    private static BattleGround battleGround = new BattleGround();
+    private static final int X_SIZE = 6;
+    private static final int Y_SIZE = 7;
     private Cell[][] board;
     private boolean winner = false;
-    private Console printer;
 
-    public BattleGround() {
+    private BattleGround() {
         this.board = new Cell[X_SIZE][Y_SIZE];
-        this.printer = new Console(this);
-        fill();
+    }
+
+    public static BattleGround getInstance() {
+        return battleGround;
     }
 
     /**
      * Fill the board with empty Cell
      */
-    private void fill() {
+    public void reset() {
         for ( int x = 0; x < X_SIZE; x++ ) {
             for (int y = 0; y < Y_SIZE; y++) {
                 this.board[x][y] = new Cell();
@@ -36,11 +39,23 @@ public class BattleGround {
     public void addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
         for (int x = X_SIZE-1; x >= 0; x--) {
             if (!this.board[x][move].isFilled()) {
-                printer.printFallingDisc(this.board, player, x, move);
+                Console.getInstance().printFallingDisc(player, x, move);
                 this.board[x][move].setDisc(player.getDisc());
                 checkWinner(x, move, player.getDisc().getSymbol());
                 break;
             }
+        }
+    }
+
+    /**
+     * validate move request by user
+     * @param move
+     * @return true if the column is not full
+     * @return false if the column is full
+     */
+    public void validateMove(int move)                                                                                                       {
+        if (board[0][move].isFilled()) {
+            throw new FullColumnException("Invalid position, the column is full!");
         }
     }
 

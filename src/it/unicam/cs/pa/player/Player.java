@@ -7,8 +7,18 @@ import java.io.InputStream;
 
 public interface Player {
 
-    int getMove(InputStream in) throws IOException;
+    /**
+     * can implement your own logic here, to get the move
+     *
+     * @return a number between 0 and 7
+     */
+    int getMove();
 
+    /**
+     *
+     *
+     * @return
+     */
     String getUser();
 
     Disc getDisc();

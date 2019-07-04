@@ -2,6 +2,7 @@ package it.unicam.cs.pa.player;
 
 import it.unicam.cs.pa.core.Disc;
 import it.unicam.cs.pa.core.DiscColors;
+import it.unicam.cs.pa.core.Utils;
 
 import java.io.*;
 
@@ -17,9 +18,15 @@ public class HumanPlayer implements Player, Serializable {
     }
 
     @Override
-    public int getMove(InputStream in) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        return Integer.parseInt(reader.readLine());
+    public int getMove() {
+        while (true) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                return Integer.parseInt(reader.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

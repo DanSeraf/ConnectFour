@@ -3,6 +3,7 @@ package it.unicam.cs.pa.core;
 import it.unicam.cs.pa.player.HumanPlayer;
 import it.unicam.cs.pa.player.RandomPlayer;
 import it.unicam.cs.pa.player.Player;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.function.BiPredicate;
@@ -14,22 +15,26 @@ import java.util.function.BiPredicate;
  * The settings will be serialized in a file called "settings.sav"
  *
  */
+
 public class Settings {
 
+    private static Settings settings = new Settings();
     final String RESET = "\u001B[0m";
     private ArrayList<Player> players;
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
     private BufferedReader reader;
     private PrintStream out;
-    private Console printer;
     private Utils util;
 
-    public Settings(InputStream in, PrintStream out) {
-        this.reader = new BufferedReader(new InputStreamReader(in));
-        this.out = out;
+    private Settings() {
+        this.reader = new BufferedReader(new InputStreamReader(System.in));
+        this.out = System.out;
         this.util = new Utils();
-        this.printer = new Console();
         restorePlayers();
+    }
+
+    public static Settings getInstance() {
+        return settings;
     }
 
     /**
@@ -46,14 +51,14 @@ public class Settings {
     private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
         char symbol;
         do {
-            printer.clean();
+            util.clean();
             out.println("-CHOOSE ONE SYMBOL-");
             util.askInput();
             symbol = reader.readLine().charAt(0);
-            if (checkSym(symbol) == false) {
+            if (!checkSym(symbol)) {
                 break;
             } else {
-                util.outError("Another player has the same symbol, choose another one");
+                util.waitInput("Another player has the same symbol, choose another one");
             }
         } while(true);
         return symbol;
@@ -67,7 +72,7 @@ public class Settings {
 
     private DiscColors getDiscColor() throws IOException {
         while (true) {
-            printer.clean();
+            util.clean();
             out.println("-CHOOSE A COLOR-");
             out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
             util.askInput();
@@ -89,12 +94,10 @@ public class Settings {
                     case 7:
                         return DiscColors.WHITE;
                     default:
-                        util.outError("Invalid option, press Enter to continue");
-                        continue;
+                        util.waitInput("Invalid option, press Enter to continue");
                 }
             } catch (NumberFormatException ne) {
-                util.outError("Not a valid option, press Enter to continue");
-                continue;
+                util.waitInput("Not a valid option, press Enter to continue");
             }
         }
     }
@@ -121,7 +124,7 @@ public class Settings {
     private void createPlayer(char symbol, String username, DiscColors color) throws IOException {
         boolean should_break = false;
         while(!should_break) {
-            printer.clean();
+            util.clean();
             out.println("-PLAYER TYPE-");
             out.println("[1] Human Player");
             out.println("[2] Random Player");
@@ -138,10 +141,10 @@ public class Settings {
                         should_break = true;
                         break;
                     default:
-                        util.outError("Invalid option, Press Enter to continue");
+                        util.waitInput("Invalid option, Press Enter to continue");
                 }
             } catch (NumberFormatException ne) {
-                util.outError("Invalid option, press Enter to continue");
+                util.waitInput("Invalid option, press Enter to continue");
             } finally {
                 serializePlayers();
             }
@@ -168,12 +171,12 @@ public class Settings {
         );
 
         util.askInput();
-        util.outError("Press Enter to continue");
+        util.waitInput("Press Enter to continue");
     }
 
     public void deletePlayer() throws IOException{
         do {
-            printer.clean();
+            util.clean();
             int[] index = new int[]{1};
             out.println("DELETE PLAYERS ([0] to Exit)");
             this.players.forEach(player ->
@@ -218,7 +221,7 @@ public class Settings {
     }
 
     /**
-     * load players serialized in Players.sav
+     * load players serialized in Settings.sav
      */
     private void deserializePlayers() {
         FileInputStream input_file = null;
@@ -243,6 +246,10 @@ public class Settings {
         }
     }
 
+    /**
+     *
+     * @return clone of players arraylist
+     */
     public ArrayList<Player> getPlayers() {
         return (ArrayList<Player>)this.players.clone();
     }

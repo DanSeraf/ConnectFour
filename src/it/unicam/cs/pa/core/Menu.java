@@ -8,21 +8,18 @@ import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
-    Settings settings;
-    Console printer;
     PrintStream out;
     Utils util;
+    Settings settings = Settings.getInstance();
 
     public Menu() {
-        this.settings = new Settings(System.in, System.out);
-        this.printer = new Console();
         this.out = new PrintStream(System.out);
         this.util = new Utils();
     }
 
     public void show() {
         do {
-            printer.clean();
+            util.clean();
             System.out.println("[1] PLAY");
             System.out.println("[2] ADD NEW PLAYER");
             System.out.println("[3] DELETE PLAYER");
@@ -33,36 +30,32 @@ public class Menu {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 int option = Integer.parseInt(reader.readLine());
                 switch(option) {
-                    case 1: Match match = new Match(this.settings);
-                        if (match.ready() == true) {
+                    case 1: Match match = new Match();
+                        if (match.ready()) {
                             match.start();
                         }
                         continue;
-                    case 2: printer.clean();
+                    case 2: util.clean();
                         settings.addNewPlayer();
                         continue;
-                    case 3: printer.clean();
-                        this.settings.deletePlayer();
+                    case 3: util.clean();
+                        settings.deletePlayer();
                         continue;
-                    case 4: printer.clean();
-                        this.settings.viewPlayers();
+                    case 4: util.clean();
+                        settings.viewPlayers();
                         continue;
-                    case 5: printer.clean();
+                    case 5: util.clean();
                         System.out.println("GOODBYE!");
                         TimeUnit.SECONDS.sleep(1);
-                        printer.clean();
+                        util.clean();
                         System.exit(0);
                     default: System.out.println("Invalid option");
-                        util.outError("Press enter to continue");
-                        continue;
+                        util.waitInput("Press enter to continue");
                 }
             } catch (NumberFormatException ex) {
-                util.outError("Not an option, press Enter to continue");
-                continue;
-            } catch (InterruptedException ie) {
+                util.waitInput("Not an option, press Enter to continue");
+            } catch (InterruptedException | IOException ie) {
                 ie.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         } while(true);
     }

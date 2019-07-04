@@ -1,5 +1,6 @@
 package it.unicam.cs.pa.core;
 
+import it.unicam.cs.pa.exception.FullColumnException;
 import it.unicam.cs.pa.player.Player;
 
 import java.io.BufferedReader;
@@ -7,25 +8,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static it.unicam.cs.pa.core.MatchStatus.END;
+import static it.unicam.cs.pa.core.MatchStatus.PLAYING;
+
+
 public class Match {
 
-    private BattleGround board;
-    private Console printer;
+    private BattleGround board = BattleGround.getInstance();
+    private Console console = Console.getInstance();
     private Player winner;
     private ArrayList<Player> available_players;
     private Player[] players;
-    private MatchStatus status = MatchStatus.PLAYING;
+    private MatchStatus status = PLAYING;
     private BufferedReader reader;
     private Utils util;
     private final String RESET = "\u001B[0m";
 
-    public Match(Settings settings) {
-        this.board = new BattleGround();
-        this.available_players = settings.getPlayers();
-        this.printer = new Console();
+    public Match() {
+        this.available_players = Settings.getInstance().getPlayers();
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.util = new Utils();
+        board.reset();
     }
 
     /**
@@ -37,12 +41,7 @@ public class Match {
         if (this.available_players.size() >= 2) {
             return true;
         } else {
-            System.out.println("You need at least 2 player, please add a new player");
-            try {
-                System.in.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            util.waitInput("You need at least 2 players\nPlease add a new player");
             return false;
         }
     }
@@ -57,36 +56,31 @@ public class Match {
     public void start() {
         selectPlayers();
         int id = 0;
-        printer.printBoardDelay(board);
+        console.printBoardDelay();
         do {
-            printer.printBoard(board);
+            console.printBoard();
             try {
                 System.out.print(this.players[id].getUser() + "> ");
-                int move = players[id].getMove(System.in);
+                int move = players[id].getMove();
+                board.validateMove(move);
                 board.addDisc(players[id], move);
                 id = getOtherPlayer(id);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (NumberFormatException ne) {
-                continue;
-            } catch (ArrayIndexOutOfBoundsException a) {
-                util.outError("Invalid position, press Enter to retry");
-                continue;
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException | FullColumnException all) {
+                util.waitInput("Invalid position, press Enter to retry");
             } finally {
-                if (this.board.isThereAWinner() == true && !board.isFull()) {
+                if (this.board.isThereAWinner() && !board.isFull()) {
                     this.winner = players[getOtherPlayer(id)];
-                    printer.printBoard(board);
-                    status = MatchStatus.END;
+                    console.printBoard();
+                    status = END;
                     printWinner();
                 }
             }
-        } while(status == MatchStatus.PLAYING);
+        } while(status == PLAYING);
     }
 
     private void printWinner() {
-        printer.printBoard(board);
         System.out.println("The winner is: " + this.winner.getDisc().getColor() + this.winner.getUser() + RESET);
-        util.outError("Press enter to return in menu");
+        util.waitInput("Press enter to return in menu");
     }
 
     /**
@@ -113,7 +107,7 @@ public class Match {
     private void selectPlayer(int n) throws IOException {
         while(true) {
             try {
-                printer.clean();
+                util.clean();
                 int[] index = new int[]{1};
                 System.out.println("PLAYER " + n);
                 this.available_players.forEach(player ->
@@ -125,9 +119,8 @@ public class Match {
                 this.players[n - 1] = this.available_players.get(opt - 1);
                 this.available_players.remove(opt - 1);
                 break;
-            } catch (IndexOutOfBoundsException e) {
-                util.outError("Not an option, press Enter to continue");
-                continue;
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                util.waitInput("Not an option, press Enter to continue");
             }
         }
     }
