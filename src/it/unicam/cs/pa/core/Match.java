@@ -65,8 +65,10 @@ public class Match {
                 board.validateMove(move);
                 board.addDisc(players[id], move);
                 id = getOtherPlayer(id);
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException | FullColumnException all) {
-                util.waitInput("Invalid position, press Enter to retry");
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException all) {
+                util.waitInput("Invalid position");
+            } catch (FullColumnException f) {
+                continue;
             } finally {
                 if (this.board.isThereAWinner() && !board.isFull()) {
                     this.winner = players[getOtherPlayer(id)];

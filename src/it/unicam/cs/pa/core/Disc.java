@@ -6,6 +6,9 @@ import java.io.Serializable;
  *
  * Disc is represented with a color and a symbol
  *
+ * The Disc is Serializable because it's used by the Player
+ * that is serialized
+ *
  */
 public class Disc implements Serializable {
 
