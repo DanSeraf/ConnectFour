@@ -151,18 +151,6 @@ public class Settings {
         }
     }
 
-    /**
-     * check if the file "settings.sav" exists
-     */
-    private void restorePlayers() {
-        File f = new File("settings.sav");
-        if(f.exists() && !f.isDirectory()) {
-            deserializePlayers();
-        } else {
-            players = new ArrayList<>();
-        }
-    }
-
     public void viewPlayers() {
         out.println("PLAYERS");
 
@@ -193,6 +181,18 @@ public class Settings {
                 break;
             }
         } while(true);
+    }
+
+    /**
+     * check if the file "settings.sav" exists
+     */
+    private void restorePlayers() {
+        File f = new File("settings.sav");
+        if(f.exists() && !f.isDirectory()) {
+            deserializePlayers();
+        } else {
+            players = new ArrayList<>();
+        }
     }
 
     /**

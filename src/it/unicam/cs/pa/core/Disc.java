@@ -12,12 +12,11 @@ public class Disc implements Serializable {
     private DiscColors color;
     private char symbol;
 
+    public Disc() {}
+
     public Disc(char symbol, DiscColors color) {
         this.symbol = symbol;
         this.color = color;
-    }
-
-    public Disc() {
     }
 
     public char getSymbol() {

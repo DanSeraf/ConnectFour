@@ -15,12 +15,13 @@ public interface Player {
     int getMove();
 
     /**
-     *
-     *
-     * @return
+     * @return username of the player
      */
     String getUser();
 
+    /**
+     * @return disc of the player
+     */
     Disc getDisc();
 
 }

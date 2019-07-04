@@ -1,6 +1,5 @@
 package it.unicam.cs.pa.player;
 
-import it.unicam.cs.pa.core.BattleGround;
 import it.unicam.cs.pa.core.Disc;
 import it.unicam.cs.pa.core.DiscColors;
 
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 public class RandomPlayer implements Player, Serializable {
 
     private static final long serialVersionUID = -4654776393486895934L;
-    private BattleGround battleGround = BattleGround.getInstance();
     private String username;
     private Disc disc;
 
