@@ -9,8 +9,7 @@ package it.unicam.cs.pa.core;
 public class Cell {
 
     private Disc disc;
-    // used to check if the cell is empty
-    private boolean filled = false;
+    private boolean filled = false; // used to check if the cell is empty
 
     public Cell() {
         this.disc = new Disc();

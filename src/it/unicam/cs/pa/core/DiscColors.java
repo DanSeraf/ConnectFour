@@ -1,6 +1,7 @@
 package it.unicam.cs.pa.core;
 
 public enum DiscColors {
+
     RED,
     GREEN,
     YELLOW,

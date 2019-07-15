@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
-    PrintStream out;
-    Utils util;
-    Settings settings = Settings.getInstance();
+    private PrintStream out;
+    private Utils util;
+    private Settings settings = Settings.getInstance();
 
     public Menu() {
         this.out = new PrintStream(System.out);

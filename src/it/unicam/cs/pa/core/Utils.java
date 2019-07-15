@@ -4,8 +4,8 @@ import java.io.*;
 
 public class Utils {
 
-    BufferedReader in;
-    PrintStream out;
+    private BufferedReader in;
+    private PrintStream out;
 
     public Utils(InputStream in, PrintStream out) {
         this.in = new BufferedReader(new InputStreamReader(in));

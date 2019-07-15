@@ -251,6 +251,6 @@ public class Settings {
      * @return clone of players arraylist
      */
     public ArrayList<Player> getPlayers() {
-        return (ArrayList<Player>)this.players.clone();
+        return (ArrayList<Player>) this.players.clone();
     }
 }

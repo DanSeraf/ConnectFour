@@ -4,6 +4,7 @@ import it.unicam.cs.pa.exception.FullColumnException;
 import it.unicam.cs.pa.player.Player;
 
 public class BattleGround {
+
     private static BattleGround battleGround = new BattleGround();
     private static final int X_SIZE = 6;
     private static final int Y_SIZE = 7;
