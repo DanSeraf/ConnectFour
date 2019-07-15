@@ -45,7 +45,9 @@ public class Settings {
         String username = getUsername();
         DiscColors color = getDiscColor();
         char symbol = getSymbol();
-        createPlayer(symbol, username, color);
+        Player newPlayer = createNewPlayer(symbol, username, color);
+        players.add(newPlayer);
+        serializePlayers();
     }
 
     private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
@@ -117,13 +119,16 @@ public class Settings {
     }
 
     /**
-     * select which kind of player they want to create
-     * @param symbol symbol that identify the player
-     * @param username username of the player
+     *
+     * let choose the user which kind of player he want to create
+     *
+     * @param symbol the unique symbol of the player disc
+     * @param username of the player
+     * @param color of the player disc
+     * @return the selected kind of player
      */
-    private void createPlayer(char symbol, String username, DiscColors color) throws IOException {
-        boolean should_break = false;
-        while(!should_break) {
+    private Player createNewPlayer (char symbol, String username, DiscColors color) {
+        do {
             util.clean();
             out.println("-PLAYER TYPE-");
             out.println("[1] Human Player");
@@ -133,24 +138,24 @@ public class Settings {
                 int option = Integer.parseInt(reader.readLine());
                 switch (option) {
                     case 1:
-                        players.add(new HumanPlayer(symbol, username, color));
-                        should_break = true;
-                        break;
+                        return new HumanPlayer(symbol, username, color);
                     case 2:
-                        players.add(new RandomPlayer(symbol, username, color));
-                        should_break = true;
-                        break;
+                        return new RandomPlayer(symbol, username, color);
                     default:
-                        util.waitInput("Invalid option, Press Enter to continue");
+                        util.waitInput("Invalid option, press Enter to continue");
+                        return createNewPlayer(symbol, username, color);
                 }
-            } catch (NumberFormatException ne) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException n) {
                 util.waitInput("Invalid option, press Enter to continue");
-            } finally {
-                serializePlayers();
             }
-        }
+        } while(true);
     }
 
+    /**
+     * Display players saved
+     */
     public void viewPlayers() {
         out.println("PLAYERS");
 
@@ -162,6 +167,11 @@ public class Settings {
         util.waitInput("Press Enter to continue");
     }
 
+    /**
+     * delete players saved
+     *
+     * @throws IOException
+     */
     public void deletePlayer() throws IOException{
         do {
             util.clean();
