@@ -22,6 +22,8 @@ public class BattleGround {
      * Fill the board with empty Cell
      */
     public void reset() {
+        winner = false;
+
         for ( int x = 0; x < X_SIZE; x++ ) {
             for (int y = 0; y < Y_SIZE; y++) {
                 this.board[x][y] = new Cell();
