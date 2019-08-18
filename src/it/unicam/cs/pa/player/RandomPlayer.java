@@ -1,17 +1,20 @@
 package it.unicam.cs.pa.player;
 
+import it.unicam.cs.pa.core.BattleGround;
 import it.unicam.cs.pa.core.Disc;
 import it.unicam.cs.pa.core.DiscColors;
 
 import java.io.Serializable;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class RandomPlayer implements Player, Serializable {
 
     private static final long serialVersionUID = -4654776393486895934L;
     private String username;
     private Disc disc;
+    private int xsize;
+    private int ysize;
+    private int pid;
+    private BattleGround bg;
 
     public RandomPlayer(char symbol, String username, DiscColors color) {
         this.username = username;
@@ -19,13 +22,16 @@ public class RandomPlayer implements Player, Serializable {
     }
 
     @Override
-    public int getMove() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return ThreadLocalRandom.current().nextInt(0, 7);
+    public int move() {
+        return 0;
+    }
+
+    @Override
+    public void init(int pid, BattleGround bg) {
+        this.pid = pid;
+        this.bg = bg;
+        this.xsize = bg.getX();
+        this.ysize = bg.getY();
     }
 
     @Override

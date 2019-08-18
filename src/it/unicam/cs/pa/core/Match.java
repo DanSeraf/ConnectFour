@@ -14,9 +14,9 @@ import static it.unicam.cs.pa.core.MatchStatus.PLAYING;
 
 public class Match {
 
-    private BattleGround board = BattleGround.getInstance();
     private Console console = Console.getInstance();
     private Player winner;
+    private BattleGround board;
     private ArrayList<Player> available_players;
     private Player[] players;
     private MatchStatus status = PLAYING;
@@ -29,7 +29,8 @@ public class Match {
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.util = new Utils();
-        board.reset();
+        this.board = new BattleGround();
+        console.init(board);
     }
 
     /**
@@ -61,7 +62,7 @@ public class Match {
             console.printBoard();
             try {
                 System.out.print(this.players[id].getUser() + "> ");
-                int move = players[id].getMove();
+                int move = players[id].move();
                 board.validateMove(move);
                 board.addDisc(players[id], move);
                 id = getOtherPlayer(id);

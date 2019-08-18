@@ -1,9 +1,7 @@
 package it.unicam.cs.pa.player;
 
+import it.unicam.cs.pa.core.BattleGround;
 import it.unicam.cs.pa.core.Disc;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public interface Player {
 
@@ -12,7 +10,7 @@ public interface Player {
      *
      * @return a number between 0 and 7
      */
-    int getMove();
+    int move();
 
     /**
      * @return username of the player
@@ -23,5 +21,7 @@ public interface Player {
      * @return disc of the player
      */
     Disc getDisc();
+
+    void init(int pid, BattleGround bg);
 
 }

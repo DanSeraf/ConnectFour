@@ -24,6 +24,10 @@ public class Cell {
         return disc;
     }
 
+    public char getDiscSymbol() { return disc.getSymbol(); }
+
+    public String getDiscColor() { return disc.getColor(); }
+
     public boolean isFilled() {
         return this.filled;
     }

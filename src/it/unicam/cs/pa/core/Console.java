@@ -15,11 +15,19 @@ public class Console {
     private static final String RESET = "\u001B[0m";
     private String row_del = "o---";
     private String row_end = "o\n";
-    private BattleGround bg = BattleGround.getInstance();
     private Utils util;
+    private Cell[][] board;
+    private int xsize;
+    private int ysize;
 
     private Console() {
         this.util = new Utils();
+    }
+
+    public void init(BattleGround bg) {
+        this.board = bg.getBoard();
+        this.xsize = bg.getX();
+        this.ysize = bg.getY();
     }
 
     /**
@@ -35,12 +43,12 @@ public class Console {
      */
     public void printBoard() {
         util.clean();
-        printNumberIndicator(bg.getySize());
-        for ( int x = 0; x < bg.getxSize(); x++){
-            printDelimiter(bg.getySize());
-            for ( int y=0; y < bg.getySize(); y++){
-                if (bg.getBoard()[x][y].isFilled()) {
-                    System.out.print("|" + bg.getBoard()[x][y].getDisc().getColor() + " " + bg.getBoard()[x][y].getDisc().getSymbol() + " " + RESET);
+        printNumberIndicator(ysize);
+        for ( int x = 0; x < xsize; x++){
+            printDelimiter(ysize);
+            for ( int y=0; y < ysize; y++){
+                if (board[x][y].isFilled()) {
+                    System.out.print("|" + board[x][y].getDiscColor() + " " + board[x][y].getDiscSymbol() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -48,7 +56,7 @@ public class Console {
             System.out.print("|");
             System.out.println();
         }
-        printDelimiter(bg.getySize());
+        printDelimiter(ysize);
         System.out.println();
     }
 
@@ -68,14 +76,14 @@ public class Console {
     }
 
     private void discAnimation(Player player, int x_move, int y_move) {
-        printNumberIndicator(bg.getySize());
-        for ( int x = 0; x < bg.getxSize(); x++) {
-            printDelimiter(bg.getySize());
-            for ( int y=0; y < bg.getySize(); y++) {
-                if (bg.getBoard()[x][y].isFilled() == true) {
-                    System.out.print("|" + bg.getBoard()[x][y].getDisc().getColor()+ " " + bg.getBoard()[x][y].getDisc().getSymbol() + " " + RESET);
+        printNumberIndicator(ysize);
+        for ( int x = 0; x < xsize; x++) {
+            printDelimiter(ysize);
+            for ( int y=0; y < ysize; y++) {
+                if (board[x][y].isFilled() == true) {
+                    System.out.print("|" + board[x][y].getDiscColor()+ " " + board[x][y].getDiscSymbol() + " " + RESET);
                 } else if (y == y_move && x == x_move) {
-                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getSymbol() + " " + RESET);
+                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getColor() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -83,23 +91,22 @@ public class Console {
             System.out.print("|");
             System.out.println();
         }
-        printDelimiter(bg.getySize());
+        printDelimiter(ysize);
         System.out.println();
 
     }
 
     public void printBoardDelay() {
         util.clean();
-        Cell[][] board = bg.getBoard();
-        printNumberIndicator(bg.getySize());
+        printNumberIndicator(ysize);
         try {
-            for (int x = 0; x < bg.getxSize(); x++) {
+            for (int x = 0; x < xsize; x++) {
                 TimeUnit.MILLISECONDS.sleep(80);
-                printDelimiter(bg.getySize());
-                for (int y = 0; y < bg.getySize(); y++) {
+                printDelimiter(ysize);
+                for (int y = 0; y < ysize; y++) {
                     TimeUnit.MILLISECONDS.sleep(50);
                     if (board[x][y].isFilled()) {
-                        System.out.print("| " + board[x][y].getDisc().getColor() + board[x][y].getDisc().getSymbol() + RESET + " ");
+                        System.out.print("| " + board[x][y].getDiscColor() + board[x][y].getDiscSymbol() + RESET + " ");
                     } else {
                         System.out.print("|   ");
                     }
@@ -107,7 +114,7 @@ public class Console {
                 System.out.print("|");
                 System.out.println();
             }
-            printDelimiter(bg.getySize());
+            printDelimiter(ysize);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

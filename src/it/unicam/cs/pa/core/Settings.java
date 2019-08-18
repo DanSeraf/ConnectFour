@@ -1,11 +1,13 @@
 package it.unicam.cs.pa.core;
 
-import it.unicam.cs.pa.player.HumanPlayer;
+import it.unicam.cs.pa.player.InteractivePlayer;
 import it.unicam.cs.pa.player.RandomPlayer;
 import it.unicam.cs.pa.player.Player;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 /**
@@ -19,7 +21,7 @@ import java.util.function.BiPredicate;
 public class Settings {
 
     private static Settings settings = new Settings();
-    final String RESET = "\u001B[0m";
+    private final String RESET = "\u001B[0m";
     private ArrayList<Player> players;
     private BiPredicate<Player, Character> sym_check = (p, c) -> p.getDisc().getSymbol()==c;
     private BufferedReader reader;
@@ -51,57 +53,39 @@ public class Settings {
     }
 
     private char getSymbol() throws IOException, StringIndexOutOfBoundsException {
-        char symbol;
         do {
             util.clean();
             out.println("-CHOOSE ONE SYMBOL-");
             util.askInput();
-            symbol = reader.readLine().charAt(0);
+            char symbol = reader.readLine().charAt(0);
             if (!checkSym(symbol)) {
-                break;
+                return symbol;
             } else {
                 util.waitInput("Another player has the same symbol, choose another one");
             }
         } while(true);
-        return symbol;
     }
 
     private String getUsername() throws IOException {
-        out.println("Choose one username");
+        out.println("-USERNAME-");
         util.askInput();
         return reader.readLine();
     }
 
     private DiscColors getDiscColor() throws IOException {
-        while (true) {
+        do {
             util.clean();
             out.println("-CHOOSE A COLOR-");
             out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n");
             util.askInput();
+            List<DiscColors> colors = Arrays.asList(DiscColors.values());
+            int opt = Integer.parseInt(reader.readLine());
             try {
-                int opt = Integer.parseInt(reader.readLine());
-                switch (opt) {
-                    case 1:
-                        return DiscColors.RED;
-                    case 2:
-                        return DiscColors.GREEN;
-                    case 3:
-                        return DiscColors.YELLOW;
-                    case 4:
-                        return DiscColors.BLUE;
-                    case 5:
-                        return DiscColors.PURPLE;
-                    case 6:
-                        return DiscColors.CYAN;
-                    case 7:
-                        return DiscColors.WHITE;
-                    default:
-                        util.waitInput("Invalid option, press Enter to continue");
-                }
-            } catch (NumberFormatException ne) {
-                util.waitInput("Not a valid option, press Enter to continue");
+                return colors.get(opt - 1);
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                util.waitInput("Input error");
             }
-        }
+        } while( true );
     }
 
     /**
@@ -110,8 +94,8 @@ public class Settings {
      * @return true if another player has the same symbol
      */
     private boolean checkSym(char symbol) {
-        for (Player player : this.players) {
-            if (this.sym_check.test(player, symbol)) {
+        for (Player player : players) {
+            if (sym_check.test(player, symbol)) {
                 return true;
             }
         }
@@ -127,7 +111,7 @@ public class Settings {
      * @param color of the player disc
      * @return the selected kind of player
      */
-    private Player createNewPlayer (char symbol, String username, DiscColors color) {
+    private Player createNewPlayer(char symbol, String username, DiscColors color) {
         do {
             util.clean();
             out.println("-PLAYER TYPE-");
@@ -138,7 +122,7 @@ public class Settings {
                 int option = Integer.parseInt(reader.readLine());
                 switch (option) {
                     case 1:
-                        return new HumanPlayer(symbol, username, color);
+                        return new InteractivePlayer(symbol, username, color);
                     case 2:
                         return new RandomPlayer(symbol, username, color);
                     default:
@@ -172,7 +156,7 @@ public class Settings {
      *
      * @throws IOException
      */
-    public void deletePlayer() throws IOException{
+    public void deletePlayer() throws IOException {
         do {
             util.clean();
             int[] index = new int[]{1};

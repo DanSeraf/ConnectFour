@@ -5,26 +5,37 @@ import it.unicam.cs.pa.player.Player;
 
 public class BattleGround {
 
-    private static BattleGround battleGround = new BattleGround();
     private static final int X_SIZE = 6;
     private static final int Y_SIZE = 7;
+    private static int X;
+    private static int Y;
     private Cell[][] board;
     private boolean winner = false;
+    private Console console = Console.getInstance();
 
-    private BattleGround() {
-        this.board = new Cell[X_SIZE][Y_SIZE];
+    public BattleGround(int x, int y) {
+        this.X = x;
+        this.Y = y;
+        this.board = new Cell[x][y];
+        fill();
     }
 
-    public static BattleGround getInstance() {
-        return battleGround;
+    public BattleGround() {
+        this( X_SIZE, Y_SIZE );
+    }
+
+    public static int getX() {
+        return X;
+    }
+
+    public static int getY() {
+        return Y;
     }
 
     /**
      * Fill the board with empty Cell
      */
-    public void reset() {
-        winner = false;
-
+    public void fill() {
         for ( int x = 0; x < X_SIZE; x++ ) {
             for (int y = 0; y < Y_SIZE; y++) {
                 this.board[x][y] = new Cell();
@@ -42,7 +53,7 @@ public class BattleGround {
     public void addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
         for (int x = X_SIZE-1; x >= 0; x--) {
             if (!this.board[x][move].isFilled()) {
-                Console.getInstance().printFallingDisc(player, x, move);
+                console.printFallingDisc(player, x, move);
                 this.board[x][move].setDisc(player.getDisc());
                 checkWinner(x, move, player.getDisc().getSymbol());
                 break;
@@ -71,36 +82,21 @@ public class BattleGround {
      *
      */
     private void checkWinner(int x, int y, char symbol) {
-        if (checkVertical(symbol, y)
-        || checkHorizontal(symbol, x)
+        if (checkLines(symbol, y, "vertical")
+        || checkLines(symbol, x, "horizontal")
         || checkDiagonal(symbol, x, y)) {
             this.winner = true;
         }
     }
 
-    private boolean checkVertical(char symbol, int y) {
+    private boolean checkLines(char symbol, int pos, String mode) {
         int count = 0;
-        for (int i = 0; i<X_SIZE; i++) {
-            if (this.board[i][y].getDisc().getSymbol() == symbol) {
-                count++;
-                if (count == 4) {
-                    return true;
-                }
-            } else { count = 0; }
-        }
-        return false;
-    }
+        int len = mode == "vertical" ? X : Y;
 
-
-    private boolean checkHorizontal(char symbol, int x) {
-        int count = 0;
-        for (int i = 0; i<Y_SIZE; i++) {
-            if (this.board[x][i].getDisc().getSymbol() == symbol) {
-                count++;
-                if (count == 4) {
-                    return true;
-                }
-            } else { count = 0; }
+        for (int i = 0; i < len; i++) {
+            if (mode == "vertical" && board[i][pos].getDiscSymbol() == symbol) count++;
+            else if (mode == "horizontal" && board[pos][i].getDiscSymbol() == symbol) count++;
+            if (count == 4) return true;
         }
         return false;
     }
@@ -115,7 +111,7 @@ public class BattleGround {
         while (true) {
             if (x == X_SIZE-1 || y == Y_SIZE-1) {
                 break;
-            } else if (this.board[++x][++y].getDisc().getSymbol() == symbol) {
+            } else if (this.board[++x][++y].getDiscSymbol() == symbol) {
                 count++;
             } else {
                 break;
@@ -129,7 +125,7 @@ public class BattleGround {
         while (true) {
             if (x == 0 || y == 0) {
                 break;
-            } else if (this.board[--x][--y].getDisc().getSymbol() == symbol) {
+            } else if (this.board[--x][--y].getDiscSymbol() == symbol) {
                 count++;
             } else { break; }
         }
@@ -141,7 +137,7 @@ public class BattleGround {
         while(true) {
             if (x == 0 || y == Y_SIZE-1) {
                 break;
-            } else if (this.board[--x][++y].getDisc().getSymbol() == symbol) {
+            } else if (this.board[--x][++y].getDiscSymbol() == symbol) {
                 count++;
             } else { break; }
         }
@@ -153,7 +149,7 @@ public class BattleGround {
         while(true) {
             if (x == X_SIZE-1 || y == 0) {
                 break;
-            } else if (this.board[++x][--y].getDisc().getSymbol() == symbol) {
+            } else if (this.board[++x][--y].getDiscSymbol() == symbol) {
                 count++;
             } else { break; }
         }
@@ -176,14 +172,6 @@ public class BattleGround {
 
     public boolean isThereAWinner() {
         return this.winner;
-    }
-
-    public int getySize() {
-        return Y_SIZE;
-    }
-
-    public int getxSize() {
-        return X_SIZE;
     }
 
     public Cell[][] getBoard() {
