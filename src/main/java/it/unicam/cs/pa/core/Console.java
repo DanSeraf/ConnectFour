@@ -13,7 +13,7 @@ public class Console {
 
     private static final Console console = new Console();
     private static final String RESET = "\u001B[0m";
-    private String row_del = "o---";
+    private String row_del = "o───";
     private String row_end = "o\n";
     private Utils util;
     private Cell[][] board;
@@ -68,7 +68,7 @@ public class Console {
             for (int i = 0; i < x_move; i++) {
                 util.clean();
                 discAnimation(player, i, y_move);
-                TimeUnit.MILLISECONDS.sleep(270);
+                TimeUnit.MILLISECONDS.sleep(2000);
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
@@ -83,7 +83,7 @@ public class Console {
                 if (board[x][y].isFilled() == true) {
                     System.out.print("|" + board[x][y].getDiscColor()+ " " + board[x][y].getDiscSymbol() + " " + RESET);
                 } else if (y == y_move && x == x_move) {
-                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getColor() + " " + RESET);
+                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getSymbol() + " " + RESET);
                 } else {
                     System.out.print("|   ");
                 }
@@ -121,7 +121,7 @@ public class Console {
     }
 
     private void printNumberIndicator(int n) {
-        System.out.println(".___.___.___.___.___.___.___.");
+        System.out.println("┌───────────────────────────┐");
         System.out.print("| ");
         for (int i = 0; i < n; i++) {
             System.out.print(i + " | ");

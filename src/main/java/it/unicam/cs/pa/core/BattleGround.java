@@ -12,16 +12,18 @@ public class BattleGround {
     private Cell[][] board;
     private boolean winner = false;
     private Console console = Console.getInstance();
+    private Automa state;
 
-    public BattleGround(int x, int y) {
+    public BattleGround(int x, int y, Automa state) {
+        this.state = state;
         this.X = x;
         this.Y = y;
         this.board = new Cell[x][y];
         fill();
     }
 
-    public BattleGround() {
-        this( X_SIZE, Y_SIZE );
+    public BattleGround(Automa states) {
+        this( X_SIZE, Y_SIZE, states );
     }
 
     public static int getX() {
@@ -43,6 +45,11 @@ public class BattleGround {
         }
     }
 
+    public boolean canMove(Player p) {
+        if (p.getPid() != state.currentPlayer()) return false;
+        return true;
+    }
+
     /**
      * Add disc in the first empty space
      *
@@ -50,24 +57,31 @@ public class BattleGround {
      * @param move x position of move
      *
      */
-    public void addDisc(Player player, int move) throws ArrayIndexOutOfBoundsException {
-        for (int x = X_SIZE-1; x >= 0; x--) {
-            if (!this.board[x][move].isFilled()) {
+    public void addDisc(Player player, int move) {
+        // not the turn of the player
+        if (player.getPid() != state.currentPlayer()) return;
+
+        try {
+            validateMove(move);
+            for (int x = X - 1; x >= 0; x--) {
                 console.printFallingDisc(player, x, move);
-                this.board[x][move].setDisc(player.getDisc());
+                board[x][move].setDisc(player.getDisc());
+                state.insert(board);
                 checkWinner(x, move, player.getDisc().getSymbol());
                 break;
             }
+        } catch (FullColumnException | ArrayIndexOutOfBoundsException f) {
+            return;
         }
     }
 
     /**
      * validate move request by user
-     * @param move
+     * @param move column of the board
      * @return true if the column is not full
      * @return false if the column is full
      */
-    public void validateMove(int move)                                                                                                       {
+    public void validateMove(int move) {
         if (board[0][move].isFilled()) {
             throw new FullColumnException("Invalid position, the column is full!");
         }
@@ -109,7 +123,7 @@ public class BattleGround {
     private int checkDiagonalRB(char symbol, int x, int y) {
         int count = 0;
         while (true) {
-            if (x == X_SIZE-1 || y == Y_SIZE-1) {
+            if (x == X-1 || y == Y-1) {
                 break;
             } else if (this.board[++x][++y].getDiscSymbol() == symbol) {
                 count++;
@@ -135,7 +149,7 @@ public class BattleGround {
     private int checkDiagonalRT(char symbol, int x, int y) {
         int count = 0;
         while(true) {
-            if (x == 0 || y == Y_SIZE-1) {
+            if (x == 0 || y == Y -1) {
                 break;
             } else if (this.board[--x][++y].getDiscSymbol() == symbol) {
                 count++;
@@ -147,7 +161,7 @@ public class BattleGround {
     private int checkDiagonalLB(char symbol, int x, int y) {
         int count = 0;
         while(true) {
-            if (x == X_SIZE-1 || y == 0) {
+            if (x == X - 1 || y == 0) {
                 break;
             } else if (this.board[++x][--y].getDiscSymbol() == symbol) {
                 count++;
@@ -160,8 +174,8 @@ public class BattleGround {
      * @return true if board is full
      */
     public boolean isFull() {
-        for (int x = 0; x < X_SIZE; x++) {
-            for (int y = 0; y < Y_SIZE; y++) {
+        for (int x = 0; x < X; x++) {
+            for (int y = 0; y < Y; y++) {
                 if (!this.board[x][y].isFilled()) {
                     return false;
                 }

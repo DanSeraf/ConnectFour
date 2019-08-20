@@ -13,7 +13,7 @@ class HumanPlayerTest {
     @Test
     @DisplayName("Human player creation")
     void createHumanPlayer() {
-        HumanPlayer p1 = new HumanPlayer('#', "Stallino", DiscColors.BLUE);
+        InteractivePlayer p1 = new InteractivePlayer('#', "Stallino", DiscColors.BLUE);
         assertNotNull(p1);
         assertEquals("Stallino", p1.getUser());
         assertEquals('#', p1.getDisc().getSymbol());
@@ -25,7 +25,7 @@ class HumanPlayerTest {
     void getMove() {
         String data = "3";
         System.setIn(new ByteArrayInputStream(data.getBytes()));
-        HumanPlayer testplayer = new HumanPlayer('#', "Pluto", DiscColors.GREEN);
-        assertEquals(3, testplayer.getMove());
+        InteractivePlayer testplayer = new InteractivePlayer('#', "Pluto", DiscColors.GREEN);
+        assertEquals(3, testplayer.move());
     }
 }
