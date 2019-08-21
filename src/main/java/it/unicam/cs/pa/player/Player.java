@@ -19,7 +19,7 @@ public interface Player {
 
     void init(int pid, BattleGround bg);
 
-    void startFighting();
+    int getMove();
 
     void winForError(Throwable e);
 

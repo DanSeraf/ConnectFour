@@ -1,6 +1,5 @@
 package it.unicam.cs.pa.core;
 
-import it.unicam.cs.pa.exception.FullColumnException;
 import it.unicam.cs.pa.player.Player;
 
 import java.io.BufferedReader;
@@ -15,7 +14,7 @@ public class Match {
 
     private static final int PLAYER1 = 0;
     private static final int PLAYER2 = 1;
-    private Automa state;
+    private RoundsManager state;
     private Console console = Console.getInstance();
     private BattleGround battleground;
     private ArrayList<Player> available_players;
@@ -30,7 +29,7 @@ public class Match {
         this.players = new Player[2];
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.util = new Utils();
-        this.state = new Automa();
+        this.state = new RoundsManager(2);
         this.battleground = new BattleGround(state);
         console.init(battleground);
     }
@@ -41,7 +40,7 @@ public class Match {
      * @return true if available players are equal of more than 2
      */
     public boolean ready() {
-        if (this.available_players.size() >= 2) {
+        if (this.available_players.size() > 1) {
             return true;
         } else {
             util.waitInput("You need at least 2 players\nPlease add a new player");
@@ -67,18 +66,19 @@ public class Match {
     }
 
     public void start() {
-        selectPlayers();
+        if (ready()) selectPlayers(); else return;
         if (!init(PLAYER1)) return;
         if (!init(PLAYER2)) return;
         setStatus(PLAYING);
-        fight();
-    }
-
-    private void fight() {
-        players[PLAYER1].startFighting();
-        players[PLAYER2].startFighting();
+        console.printBoardDelay();
         while (doAction());
     }
+
+//    private void fight() {
+//        players[PLAYER1].startFighting();
+//        players[PLAYER2].startFighting();
+//        while (doAction());
+//    }
 
     /**
      * Match initialization:
@@ -91,9 +91,12 @@ public class Match {
         util.clean();
         console.printBoard();
         if (battleground.isThereAWinner()) status = END;
+        if (battleground.isFull()) status = FULLBOARD;
 
         if (status == PLAYING) {
             System.out.print(this.players[state.currentPlayer()].getUser() + "> ");
+            int a = players[state.currentPlayer()].getMove();
+            battleground.addDisc(players[state.currentPlayer()], a);
             return true;
         }
         else if (status == END) {

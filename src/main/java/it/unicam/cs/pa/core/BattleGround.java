@@ -12,9 +12,9 @@ public class BattleGround {
     private Cell[][] board;
     private boolean winner = false;
     private Console console = Console.getInstance();
-    private Automa state;
+    private RoundsManager state;
 
-    public BattleGround(int x, int y, Automa state) {
+    public BattleGround(int x, int y, RoundsManager state) {
         this.state = state;
         this.X = x;
         this.Y = y;
@@ -22,7 +22,7 @@ public class BattleGround {
         fill();
     }
 
-    public BattleGround(Automa states) {
+    public BattleGround(RoundsManager states) {
         this( X_SIZE, Y_SIZE, states );
     }
 
@@ -37,7 +37,7 @@ public class BattleGround {
     /**
      * Fill the board with empty Cell
      */
-    public void fill() {
+    private void fill() {
         for ( int x = 0; x < X_SIZE; x++ ) {
             for (int y = 0; y < Y_SIZE; y++) {
                 this.board[x][y] = new Cell();
@@ -48,6 +48,13 @@ public class BattleGround {
     public boolean canMove(Player p) {
         if (p.getPid() != state.currentPlayer()) return false;
         return true;
+    }
+
+    private int getFreeCellPosition(int move) {
+        for (int x = X-1; x >= 0; x--) {
+            if (!board[x][move].isFilled()) return x;
+        }
+        return -1;
     }
 
     /**
@@ -63,13 +70,11 @@ public class BattleGround {
 
         try {
             validateMove(move);
-            for (int x = X - 1; x >= 0; x--) {
-                console.printFallingDisc(player, x, move);
-                board[x][move].setDisc(player.getDisc());
-                state.insert(board);
-                checkWinner(x, move, player.getDisc().getSymbol());
-                break;
-            }
+            int pos = getFreeCellPosition(move);
+            console.printFallingDisc(player, pos, move);
+            board[pos][move].setDisc(player.getDisc());
+            state.insert(board);
+            checkWinner(pos, move, player.getDisc().getSymbol());
         } catch (FullColumnException | ArrayIndexOutOfBoundsException f) {
             return;
         }
@@ -103,13 +108,13 @@ public class BattleGround {
         }
     }
 
-    private boolean checkLines(char symbol, int pos, String mode) {
+    private boolean checkLines(char symbol, int row, String mode) {
         int count = 0;
         int len = mode == "vertical" ? X : Y;
 
         for (int i = 0; i < len; i++) {
-            if (mode == "vertical" && board[i][pos].getDiscSymbol() == symbol) count++;
-            else if (mode == "horizontal" && board[pos][i].getDiscSymbol() == symbol) count++;
+            if (mode == "vertical" && board[i][row].getDiscSymbol() == symbol) count++;
+            else if (mode == "horizontal" && board[row][i].getDiscSymbol() == symbol) count++;
             if (count == 4) return true;
         }
         return false;
@@ -189,6 +194,6 @@ public class BattleGround {
     }
 
     public Cell[][] getBoard() {
-        return this.board;
+        return this.board.clone();
     }
 }

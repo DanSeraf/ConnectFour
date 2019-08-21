@@ -15,7 +15,9 @@ public class Disc implements Serializable {
     private DiscColors color;
     private char symbol;
 
-    public Disc() {}
+    public Disc() {
+
+    }
 
     public Disc(char symbol, DiscColors color) {
         this.symbol = symbol;
@@ -28,5 +30,10 @@ public class Disc implements Serializable {
 
     public String getColor() {
         return this.color.toString();
+    }
+
+    @Override
+    public String toString() {
+        return color + " " + symbol + " " + DiscColors.RESET;
     }
 }

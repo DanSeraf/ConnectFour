@@ -11,23 +11,17 @@ public class InteractivePlayer implements Player, Serializable {
     private static final long serialVersionUID = 6446382602942139248L;
     private String username;
     private Disc disc;
-    private BattleGround bg;
     private transient BufferedReader in;
     private transient PrintStream out;
+    private BattleGround battleground;
     private int pid;
     private int xsize;
     private int ysize;
 
 
-    public InteractivePlayer(char symbol, String username, DiscColors color, InputStream in, PrintStream out) {
+    public InteractivePlayer(char symbol, String username, DiscColors color) {
         this.username = username;
         this.disc = new Disc(symbol, color);
-        this.in = new BufferedReader(new InputStreamReader(in));
-        this.out = out;
-    }
-
-    public InteractivePlayer(char symbol, String username, DiscColors color) {
-        this( symbol, username, color, System.in, System.out );
     }
 
     private boolean isValid(String msg) {
@@ -55,24 +49,27 @@ public class InteractivePlayer implements Player, Serializable {
     }
 
     @Override
-    public void startFighting() {
-        while(true) {
-            if (bg.canMove(this)) {
+    public int getMove() {
+        if (battleground.canMove(this)) {
+            while(true) {
                 try {
                     String opt = in.readLine();
-                    bg.addDisc(this, 0);
+                    if (isValid(opt)) {
+                        return Integer.parseUnsignedInt(opt);
+                    } else { continue; }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }
-
+        } else { return -1; }
     }
 
     @Override
     public void init(int pid, BattleGround bg) {
         this.pid = pid;
-        this.bg = bg;
+        this.battleground = bg;
+        this.in = new BufferedReader(new InputStreamReader(System.in));
+        this.out = System.out;
         this.xsize = bg.getX();
         this.ysize = bg.getY();
     }

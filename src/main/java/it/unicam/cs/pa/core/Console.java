@@ -4,6 +4,8 @@ import it.unicam.cs.pa.player.Player;
 
 import java.util.concurrent.TimeUnit;
 
+import static it.unicam.cs.pa.core.DiscColors.RESET;
+
 /**
  *
  * Simple screen utility to print board and animation
@@ -12,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 public class Console {
 
     private static final Console console = new Console();
-    private static final String RESET = "\u001B[0m";
     private String row_del = "o───";
     private String row_end = "o\n";
     private Utils util;
@@ -48,7 +49,7 @@ public class Console {
             printDelimiter(ysize);
             for ( int y=0; y < ysize; y++){
                 if (board[x][y].isFilled()) {
-                    System.out.print("|" + board[x][y].getDiscColor() + " " + board[x][y].getDiscSymbol() + " " + RESET);
+                    System.out.print("|" + board[x][y].getDisc().toString());
                 } else {
                     System.out.print("|   ");
                 }
@@ -65,10 +66,10 @@ public class Console {
      */
     public void printFallingDisc(Player player, int x_move, int y_move) {
         try {
-            for (int i = 0; i < x_move; i++) {
+            for (int x = 0; x < xsize-x_move; x++) {
                 util.clean();
-                discAnimation(player, i, y_move);
-                TimeUnit.MILLISECONDS.sleep(2000);
+                discAnimation(player, x, y_move);
+                TimeUnit.MILLISECONDS.sleep(100);
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
@@ -81,9 +82,9 @@ public class Console {
             printDelimiter(ysize);
             for ( int y=0; y < ysize; y++) {
                 if (board[x][y].isFilled() == true) {
-                    System.out.print("|" + board[x][y].getDiscColor()+ " " + board[x][y].getDiscSymbol() + " " + RESET);
+                    System.out.print("|" + board[x][y].getDisc().toString());
                 } else if (y == y_move && x == x_move) {
-                    System.out.print("|" + player.getDisc().getColor() + " " + player.getDisc().getSymbol() + " " + RESET);
+                    System.out.print("|" + player.getDisc().toString());
                 } else {
                     System.out.print("|   ");
                 }
@@ -105,11 +106,7 @@ public class Console {
                 printDelimiter(ysize);
                 for (int y = 0; y < ysize; y++) {
                     TimeUnit.MILLISECONDS.sleep(50);
-                    if (board[x][y].isFilled()) {
-                        System.out.print("| " + board[x][y].getDiscColor() + board[x][y].getDiscSymbol() + RESET + " ");
-                    } else {
-                        System.out.print("|   ");
-                    }
+                    System.out.print("|   ");
                 }
                 System.out.print("|");
                 System.out.println();

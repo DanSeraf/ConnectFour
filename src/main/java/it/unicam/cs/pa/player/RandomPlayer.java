@@ -41,8 +41,8 @@ public class RandomPlayer implements Player, Serializable {
     }
 
     @Override
-    public void startFighting() {
-        return;
+    public int getMove() {
+        return 0;
     }
 
     @Override
