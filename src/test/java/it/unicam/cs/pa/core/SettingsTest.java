@@ -1,9 +1,7 @@
 package it.unicam.cs.pa.core;
 
 import it.unicam.cs.pa.player.Player;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -39,5 +37,11 @@ class SettingsTest {
         assertEquals("Pluto", p.getUser());
         assertEquals("\u001B[41m", p.getDisc().getColor());
         assertEquals('P', p.getDisc().getSymbol());
+    }
+
+    @AfterEach
+    void clean() {
+        File f = new File("settings.sav");
+        f.delete();
     }
 }

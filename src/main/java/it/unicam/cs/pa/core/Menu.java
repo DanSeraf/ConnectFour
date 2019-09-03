@@ -1,20 +1,21 @@
 package it.unicam.cs.pa.core;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
-    private PrintStream out;
     private Utils util;
     private Settings settings = Settings.getInstance();
+    private BufferedReader reader;
+
+    public Menu(InputStream in) {
+        this.reader = new BufferedReader(new InputStreamReader(in));
+        this.util = new Utils();
+    }
 
     public Menu() {
-        this.out = new PrintStream(System.out);
-        this.util = new Utils();
+        this(System.in);
     }
 
     public void show() {
@@ -27,13 +28,11 @@ public class Menu {
             System.out.println("[5] EXIT");
             util.askInput();
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                int option = Integer.parseInt(reader.readLine());
+                int option = Integer.parseUnsignedInt(reader.readLine());
                 switch(option) {
-                    case 1: Match match = new Match();
-                        if (match.ready()) {
-                            match.start();
-                        }
+                    case 1: int nplayers = getNumberOfPlayers();
+                        Match match = new Match(nplayers);
+                        match.start();
                         continue;
                     case 2: util.clean();
                         settings.addNewPlayer();
@@ -58,5 +57,20 @@ public class Menu {
                 ie.printStackTrace();
             }
         } while(true);
+    }
+
+    public int getNumberOfPlayers() {
+        System.out.println("Number of players:");
+        util.askInput();
+        while(true) {
+            try {
+                int np = Integer.parseUnsignedInt(reader.readLine());
+                return np;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException n) {
+                util.waitInput("Input error!");
+            }
+        }
     }
 }

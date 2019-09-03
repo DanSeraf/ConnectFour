@@ -22,8 +22,8 @@ public class BattleGround {
         fill();
     }
 
-    public BattleGround(RoundsManager states) {
-        this( X_SIZE, Y_SIZE, states );
+    public BattleGround(RoundsManager state) {
+        this( X_SIZE, Y_SIZE, state );
     }
 
     public static int getX() {
@@ -38,8 +38,8 @@ public class BattleGround {
      * Fill the board with empty Cell
      */
     private void fill() {
-        for ( int x = 0; x < X_SIZE; x++ ) {
-            for (int y = 0; y < Y_SIZE; y++) {
+        for ( int x = 0; x < X; x++ ) {
+            for (int y = 0; y < Y; y++) {
                 this.board[x][y] = new Cell();
             }
         }
@@ -73,8 +73,9 @@ public class BattleGround {
             int pos = getFreeCellPosition(move);
             console.printFallingDisc(player, pos, move);
             board[pos][move].setDisc(player.getDisc());
-            state.insert(board);
-            checkWinner(pos, move, player.getDisc().getSymbol());
+            if (!checkWinner(pos, move, player.getDisc().getSymbol())) {
+                state.insert(board);
+            }
         } catch (FullColumnException | ArrayIndexOutOfBoundsException f) {
             return;
         }
@@ -100,12 +101,14 @@ public class BattleGround {
      * @param symbol symbol of the player who is playing
      *
      */
-    private void checkWinner(int x, int y, char symbol) {
+    private boolean checkWinner(int x, int y, char symbol) {
         if (checkLines(symbol, y, "vertical")
         || checkLines(symbol, x, "horizontal")
         || checkDiagonal(symbol, x, y)) {
             this.winner = true;
+            return true;
         }
+        return false;
     }
 
     private boolean checkLines(char symbol, int row, String mode) {
@@ -113,8 +116,8 @@ public class BattleGround {
         int len = mode == "vertical" ? X : Y;
 
         for (int i = 0; i < len; i++) {
-            if (mode == "vertical" && board[i][row].getDiscSymbol() == symbol) count++;
-            else if (mode == "horizontal" && board[row][i].getDiscSymbol() == symbol) count++;
+            if (mode == "vertical") if (board[i][row].getDiscSymbol() == symbol) count++; else count = 0;
+            else if (mode == "horizontal") if (board[row][i].getDiscSymbol() == symbol) count++; else count = 0;
             if (count == 4) return true;
         }
         return false;

@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HumanPlayerTest {
+class InteractivePlayerTest {
 
     @Test
     @DisplayName("Human player creation")
@@ -26,6 +26,6 @@ class HumanPlayerTest {
         String data = "3";
         System.setIn(new ByteArrayInputStream(data.getBytes()));
         InteractivePlayer testplayer = new InteractivePlayer('#', "Pluto", DiscColors.GREEN);
-        assertEquals(3, testplayer.move());
+        assertEquals(3, testplayer.getMove());
     }
 }

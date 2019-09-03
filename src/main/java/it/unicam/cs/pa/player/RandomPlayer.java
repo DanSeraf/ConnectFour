@@ -6,6 +6,7 @@ import it.unicam.cs.pa.core.DiscColors;
 
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomPlayer implements Player, Serializable {
 
@@ -15,13 +16,11 @@ public class RandomPlayer implements Player, Serializable {
     private int xsize;
     private int ysize;
     private int pid;
-    private BattleGround bg;
-    private transient PrintStream out;
+    private BattleGround battleground;
 
     public RandomPlayer(char symbol, String username, DiscColors color) {
         this.username = username;
         this.disc = new Disc(symbol, color);
-        this.out = System.out;
     }
 
 
@@ -42,34 +41,37 @@ public class RandomPlayer implements Player, Serializable {
 
     @Override
     public int getMove() {
-        return 0;
+        if (battleground.canMove(this)) {
+            return ThreadLocalRandom.current().nextInt(0,ysize);
+        }
+        return -1;
     }
 
     @Override
     public void init(int pid, BattleGround bg) {
         this.pid = pid;
-        this.bg = bg;
+        this.battleground = bg;
         this.xsize = bg.getX();
         this.ysize = bg.getY();
     }
 
     @Override
     public void youWin() {
-        out.println("Congratulation " + this.username + " you have won!");
+        System.out.println("Congratulation " + this.username + " you have won!");
     }
 
     @Override
     public void youLoose() {
-        out.println("Ohhhh " + this.username + " you have lost dude!");
+        System.out.println("Ohhhh " + this.username + " you have lost dude!");
     }
 
     @Override
     public void winForError(Throwable e) {
-        out.println("Wow, you have won, your opponent has made an error: " + e.getMessage());
+        System.out.println("Wow, you have won, your opponent has made an error: " + e.getMessage());
     }
 
     @Override
     public void looseForError(Throwable e) {
-        out.println("Damn you have lost: " + e.getMessage());
+        System.out.println("Damn you have lost: " + e.getMessage());
     }
 }

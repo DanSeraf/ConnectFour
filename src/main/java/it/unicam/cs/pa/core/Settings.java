@@ -76,10 +76,9 @@ public class Settings {
         do {
             util.clean();
             out.println("-CHOOSE A COLOR-");
-            out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n[8]NOTHING");
+            out.print("[1] RED \n[2] GREEN \n[3] YELLOW \n[4] BLUE \n[5] PURPLE \n[6] CYAN \n[7] WHITE\n[8] NOTHING\n");
             util.askInput();
             List<DiscColors> colors = Arrays.asList(DiscColors.values());
-            System.out.println(colors.size());
             int opt = Integer.parseInt(reader.readLine());
             try {
                 return colors.get(opt - 1);

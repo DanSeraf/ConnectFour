@@ -22,6 +22,7 @@ class DiscColorsTest {
         assertEquals("\u001B[45m", colors.get(4).toString());
         assertEquals("\u001B[46m", colors.get(5).toString());
         assertEquals("\u001B[47m", colors.get(6).toString());
+        assertEquals("\u001B[0m", colors.get(7).toString());
     }
 
 }

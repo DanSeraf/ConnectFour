@@ -2,9 +2,10 @@ package it.unicam.cs.pa.core;
 
 import it.unicam.cs.pa.player.Player;
 
+import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
-import static it.unicam.cs.pa.core.DiscColors.RESET;
+import static it.unicam.cs.pa.core.UnicodeBox.*;
 
 /**
  *
@@ -14,15 +15,18 @@ import static it.unicam.cs.pa.core.DiscColors.RESET;
 public class Console {
 
     private static final Console console = new Console();
-    private String row_del = "o───";
-    private String row_end = "o\n";
+    private static final String row_start = "├───";
+    private static final String row_del = "┼───";
+    private static final String row_end = "┤\n";
     private Utils util;
     private Cell[][] board;
+    private PrintStream out;
     private int xsize;
     private int ysize;
 
     private Console() {
         this.util = new Utils();
+        this.out = System.out;
     }
 
     public void init(BattleGround bg) {
@@ -32,7 +36,6 @@ public class Console {
     }
 
     /**
-     * Simple return the instance of the singleton class
      * @return instance of Console
      */
     public static Console getInstance() {
@@ -44,21 +47,20 @@ public class Console {
      */
     public void printBoard() {
         util.clean();
-        printNumberIndicator(ysize);
+        printNumberIndicator();
         for ( int x = 0; x < xsize; x++){
-            printDelimiter(ysize);
+            printDelimiter();
             for ( int y=0; y < ysize; y++){
                 if (board[x][y].isFilled()) {
-                    System.out.print("|" + board[x][y].getDisc().toString());
+                    out.print(PIPE + board[x][y].getDisc().toString());
                 } else {
-                    System.out.print("|   ");
+                    out.print(EMPTYCELL);
                 }
             }
-            System.out.print("|");
-            System.out.println();
+            out.print(PIPE);
+            out.println();
         }
-        printDelimiter(ysize);
-        System.out.println();
+        printBottomDelimiter();
     }
 
     /**
@@ -66,10 +68,11 @@ public class Console {
      */
     public void printFallingDisc(Player player, int x_move, int y_move) {
         try {
-            for (int x = 0; x < xsize-x_move; x++) {
+            for (int x = 0; x < x_move; x++) {
+                System.out.println(x);
                 util.clean();
                 discAnimation(player, x, y_move);
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(0);
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
@@ -77,59 +80,71 @@ public class Console {
     }
 
     private void discAnimation(Player player, int x_move, int y_move) {
-        printNumberIndicator(ysize);
+        printNumberIndicator();
         for ( int x = 0; x < xsize; x++) {
-            printDelimiter(ysize);
+            printDelimiter();
             for ( int y=0; y < ysize; y++) {
                 if (board[x][y].isFilled() == true) {
-                    System.out.print("|" + board[x][y].getDisc().toString());
+                    out.print(PIPE + board[x][y].getDisc().toString());
                 } else if (y == y_move && x == x_move) {
-                    System.out.print("|" + player.getDisc().toString());
+                    out.print(PIPE + player.getDisc().toString());
                 } else {
-                    System.out.print("|   ");
+                    out.print(EMPTYCELL);
                 }
             }
-            System.out.print("|");
-            System.out.println();
+            out.print("│");
+            out.println();
         }
-        printDelimiter(ysize);
-        System.out.println();
-
+        printBottomDelimiter();
     }
 
     public void printBoardDelay() {
         util.clean();
-        printNumberIndicator(ysize);
+        printNumberIndicator();
         try {
             for (int x = 0; x < xsize; x++) {
                 TimeUnit.MILLISECONDS.sleep(80);
-                printDelimiter(ysize);
+                printDelimiter();
                 for (int y = 0; y < ysize; y++) {
                     TimeUnit.MILLISECONDS.sleep(50);
-                    System.out.print("|   ");
+                    out.print(EMPTYCELL);
                 }
-                System.out.print("|");
-                System.out.println();
+                out.print(PIPE);
+                out.println();
             }
-            printDelimiter(ysize);
+            printBottomDelimiter();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void printNumberIndicator(int n) {
-        System.out.println("┌───────────────────────────┐");
-        System.out.print("| ");
-        for (int i = 0; i < n; i++) {
-            System.out.print(i + " | ");
+    private void printNumberIndicator() {
+        out.print(ULCORNER);
+        for (int j = 0; j < ysize-1; j++) {
+            out.print(USEPARATOR);
         }
-        System.out.println();
+        out.println(URCORNER);
+        out.print(PIPE + " ");
+        for (int i = 0; i < ysize; i++) {
+            if (i > 9) out.print(i + "" + PIPE + " ");
+            else out.print(i + " " + PIPE + " ");
+        }
+        out.println();
     }
 
-    private void printDelimiter(int size) {
-        for (int i = 0; i < size; i++) {
-            System.out.print(row_del);
+    private void printDelimiter() {
+        out.print(LSEPARATOR);
+        for (int i = 0; i < ysize-1; i++) {
+            out.print(MSEPARATOR);
         }
-        System.out.print(row_end);
+        out.println(RSEPARATOR);
+    }
+
+    private void printBottomDelimiter() {
+        out.print(DLCORNER);
+        for (int i = 0; i < ysize-1; i++) {
+            out.print(DSEPARATOR);
+        }
+        out.println(DRCORNER);
     }
 }
