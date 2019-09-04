@@ -111,6 +111,9 @@ public class BattleGround {
         return false;
     }
 
+    /**
+     * check if in vertical and horizontal there are four equal discs
+     */
     private boolean checkLines(char symbol, int row, String mode) {
         int count = 0;
         int len = mode == "vertical" ? X : Y;

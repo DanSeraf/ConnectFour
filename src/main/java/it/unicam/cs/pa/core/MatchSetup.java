@@ -8,6 +8,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ *
+ * This class is responsable of the match sepup
+ * It let the users select the player they prefer and the board size
+ *
+ */
+
 public class MatchSetup {
     private Player[] players;
     private int nplayers;
@@ -26,7 +33,7 @@ public class MatchSetup {
     public MatchSetup(RoundsManager state, int nplayers) {
         this(state, nplayers, System.in);
     }
-
+    
     public Player[] selectPlayers() {
         for (int n = 1; n <= nplayers; n++) {
             try {
@@ -40,8 +47,7 @@ public class MatchSetup {
 
     /**
      * Let user select which character they want to use from the available_players ArrayList
-     * delete the chosen player from available_players
-     * @param n number of the player
+     * @param n id of the player
      */
     private void selectPlayer(int n) throws IOException {
         util.clean();
@@ -63,7 +69,10 @@ public class MatchSetup {
             }
         }
     }
-
+    
+    /**
+     * let the player choose the board size
+     */
     public BattleGround selectBoard() {
         System.out.println("-BOARD SIZE-\n[1] DEFAULT\n[2] CUSTOM");
         while(true) {

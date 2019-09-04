@@ -1,5 +1,10 @@
 package it.unicam.cs.pa.core;
 
+/**
+ * Utility enum for the Console class 
+ * It contains all the unicode string to draw boxes
+ */
+
 public enum UnicodeBox {
     EMPTYCELL,
     PIPE,

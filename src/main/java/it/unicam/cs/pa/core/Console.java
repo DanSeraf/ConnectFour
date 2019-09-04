@@ -72,7 +72,7 @@ public class Console {
                 System.out.println(x);
                 util.clean();
                 discAnimation(player, x, y_move);
-                TimeUnit.MILLISECONDS.sleep(0);
+                TimeUnit.MILLISECONDS.sleep(160);
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
