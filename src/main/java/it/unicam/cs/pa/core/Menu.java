@@ -29,6 +29,7 @@ public class Menu {
             util.askInput();
             try {
                 int option = Integer.parseUnsignedInt(reader.readLine());
+                util.clean();
                 switch(option) {
                     case 1: int nplayers = getNumberOfPlayers();
                         Match match = new Match(nplayers);
@@ -65,6 +66,7 @@ public class Menu {
         while(true) {
             try {
                 int np = Integer.parseUnsignedInt(reader.readLine());
+                //TODO throws exception there are less than 2 players 
                 return np;
             } catch (IOException e) {
                 e.printStackTrace();

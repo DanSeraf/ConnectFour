@@ -45,7 +45,7 @@ public class Match {
         if (this.available_players.size() >= nplayers) {
             return true;
         } else {
-            util.waitInput("You need at least" + nplayers + "players\nPlease add a new player");
+            util.waitInput("You need at least " + nplayers + " players\nPlease add a new player");
             return false;
         }
     }
@@ -114,8 +114,9 @@ public class Match {
     }
 
     public void printWinner() {
+        players[state.currentPlayer()].youWin();
         for (int pn = 0; pn < nplayers; pn++) {
-            if (pn == state.currentPlayer()) players[pn].youWin();
+            if (pn == state.currentPlayer()) continue;
             else players[pn].youLoose();
         }
     }
